@@ -32,6 +32,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	bool IsSprinting() const;
 
+	UFUNCTION(BlueprintCallable)
+	float GetMovementDirection() const;
+
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;

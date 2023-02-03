@@ -71,3 +71,14 @@ bool ASBBaseCharacter::IsSprinting() const
 {
 	return bShouldSprint && bIsMovingForward;
 }
+
+float ASBBaseCharacter::GetMovementDirection() const
+{
+	if (GetVelocity().IsZero()) return 0.0f;
+
+	const FVector VelocityNormal = GetVelocity().GetSafeNormal();
+	const float DotProduct = FMath::Acos(FVector::DotProduct(GetActorForwardVector(), VelocityNormal));
+	const FVector CrossProduct = FVector::CrossProduct(GetActorForwardVector(), VelocityNormal);
+	
+	return FMath::RadiansToDegrees(DotProduct) * FMath::Sign(CrossProduct.Z);
+}
