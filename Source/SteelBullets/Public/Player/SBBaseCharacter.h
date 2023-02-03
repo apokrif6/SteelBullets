@@ -14,8 +14,11 @@ class STEELBULLETS_API ASBBaseCharacter : public ACharacter
 	GENERATED_BODY()
 
 public:
-	ASBBaseCharacter();
+	ASBBaseCharacter(const FObjectInitializer& ObjectInitializer);
 
+	bool bIsMovingForward = false;
+
+	bool bShouldSprint = false;
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	USpringArmComponent* SpringArmComponent;
@@ -26,12 +29,19 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
+	UFUNCTION(BlueprintCallable)
+	bool IsSprinting() const;
+
 	virtual void Tick(float DeltaTime) override;
 
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
 private:
 	void MoveForward(float Value);
 
 	void MoveRight(float Value);
+
+	void StartSprint();
+
+	void StopSprint();
 };
