@@ -27,15 +27,15 @@ ASBBaseCharacter::ASBBaseCharacter(const FObjectInitializer& ObjectInitializer)
 void ASBBaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	OnHealthChanged(HealthComponent->GetHealth());
+	HealthComponent->OnHealthChanged.AddUObject(this, &ASBBaseCharacter::OnHealthChanged);
+	HealthComponent->OnDeath.AddUObject(this, &ASBBaseCharacter::OnDeath);
 }
 
 void ASBBaseCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	const float Health = HealthComponent->GetHealth();
-	
-	HealthTextRenderComponent->SetText(FText::FromString(FString::SanitizeFloat(Health)));
 }
 
 void ASBBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -88,6 +88,20 @@ float ASBBaseCharacter::GetMovementDirection() const
 	const FVector VelocityNormal = GetVelocity().GetSafeNormal();
 	const float DotProduct = FMath::Acos(FVector::DotProduct(GetActorForwardVector(), VelocityNormal));
 	const FVector CrossProduct = FVector::CrossProduct(GetActorForwardVector(), VelocityNormal);
-	
+
 	return FMath::RadiansToDegrees(DotProduct) * FMath::Sign(CrossProduct.Z);
+}
+
+void ASBBaseCharacter::OnHealthChanged(float Health)
+{
+	HealthTextRenderComponent->SetText(FText::FromString(FString::Printf(TEXT("%.0f"), Health)));
+}
+
+void ASBBaseCharacter::OnDeath()
+{
+	PlayAnimMontage(DeathAnimMontage);
+
+	GetCharacterMovement()->DisableMovement();
+
+	SetLifeSpan(5.0f);
 }
