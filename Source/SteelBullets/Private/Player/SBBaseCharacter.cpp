@@ -17,6 +17,11 @@ ASBBaseCharacter::ASBBaseCharacter(const FObjectInitializer& ObjectInitializer)
 
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>("CameraComponent");
 	CameraComponent->SetupAttachment(SpringArmComponent);
+
+	HealthComponent = CreateDefaultSubobject<USBHealthComponent>("HealthComponent");
+
+	HealthTextRenderComponent = CreateDefaultSubobject<UTextRenderComponent>("HealthTextRenderComponent");
+	HealthTextRenderComponent->SetupAttachment(GetRootComponent());
 }
 
 void ASBBaseCharacter::BeginPlay()
@@ -27,6 +32,10 @@ void ASBBaseCharacter::BeginPlay()
 void ASBBaseCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	const float Health = HealthComponent->GetHealth();
+	
+	HealthTextRenderComponent->SetText(FText::FromString(FString::SanitizeFloat(Health)));
 }
 
 void ASBBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
