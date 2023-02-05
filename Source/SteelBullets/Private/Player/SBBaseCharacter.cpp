@@ -31,6 +31,8 @@ void ASBBaseCharacter::BeginPlay()
 	OnHealthChanged(HealthComponent->GetHealth());
 	HealthComponent->OnHealthChanged.AddUObject(this, &ASBBaseCharacter::OnHealthChanged);
 	HealthComponent->OnDeath.AddUObject(this, &ASBBaseCharacter::OnDeath);
+
+	LandedDelegate.AddDynamic(this, &ASBBaseCharacter::OnGroundLanded);
 }
 
 void ASBBaseCharacter::Tick(float DeltaTime)
@@ -104,4 +106,14 @@ void ASBBaseCharacter::OnDeath()
 	GetCharacterMovement()->DisableMovement();
 
 	SetLifeSpan(5.0f);
+}
+
+void ASBBaseCharacter::OnGroundLanded(const FHitResult& HitResult)
+{
+	const float FallingVelocity = - GetVelocity().Z;
+
+	if (FallingVelocity < FallingDamageVelocity.X) return;
+
+	const float DamageToDeal = FMath::GetMappedRangeValueClamped(FallingDamageVelocity, FallingDamage, FallingVelocity);
+	TakeDamage(DamageToDeal, FDamageEvent{}, nullptr, nullptr);
 }

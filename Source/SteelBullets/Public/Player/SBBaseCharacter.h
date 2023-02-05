@@ -37,7 +37,13 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Animations")
 	UAnimMontage* DeathAnimMontage;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Damage")
+	FVector2D FallingDamageVelocity = FVector2D(900.0f, 1200.0f);
 
+	UPROPERTY(EditDefaultsOnly, Category = "Damage")
+	FVector2D FallingDamage = FVector2D(10.0f, 50.0f);
+	
 	virtual void BeginPlay() override;
 
 public:
@@ -63,4 +69,7 @@ private:
 	void OnHealthChanged(float Health);
 
 	void OnDeath();
+
+	UFUNCTION()
+	void OnGroundLanded(const FHitResult& HitResult);
 };
