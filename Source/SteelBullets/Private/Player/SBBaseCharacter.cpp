@@ -33,6 +33,8 @@ void ASBBaseCharacter::BeginPlay()
 	HealthComponent->OnDeath.AddUObject(this, &ASBBaseCharacter::OnDeath);
 
 	LandedDelegate.AddDynamic(this, &ASBBaseCharacter::OnGroundLanded);
+
+	SpawnWeapon();
 }
 
 void ASBBaseCharacter::Tick(float DeltaTime)
@@ -116,4 +118,18 @@ void ASBBaseCharacter::OnGroundLanded(const FHitResult& HitResult)
 
 	const float DamageToDeal = FMath::GetMappedRangeValueClamped(FallingDamageVelocity, FallingDamage, FallingVelocity);
 	TakeDamage(DamageToDeal, FDamageEvent{}, nullptr, nullptr);
+}
+
+void ASBBaseCharacter::SpawnWeapon() const
+{
+	UWorld* World = GetWorld();
+
+	if (!World) return;
+	
+	const auto Weapon = World->SpawnActor<ASBBaseWeapon>(WeaponClass);
+
+	if (!Weapon) return;
+
+	const FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, false);
+	Weapon->AttachToComponent(GetMesh(), AttachmentRules, WeaponSocketName);
 }

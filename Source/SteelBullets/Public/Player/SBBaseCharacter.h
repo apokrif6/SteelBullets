@@ -8,6 +8,7 @@
 #include "Components/TextRenderComponent.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Weapon/SBBaseWeapon.h"
 #include "SBBaseCharacter.generated.h"
 
 UCLASS()
@@ -37,13 +38,16 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Animations")
 	UAnimMontage* DeathAnimMontage;
-	
+
 	UPROPERTY(EditDefaultsOnly, Category = "Damage")
 	FVector2D FallingDamageVelocity = FVector2D(900.0f, 1200.0f);
 
 	UPROPERTY(EditDefaultsOnly, Category = "Damage")
 	FVector2D FallingDamage = FVector2D(10.0f, 50.0f);
-	
+
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
+	TSubclassOf<ASBBaseWeapon> WeaponClass;
+
 	virtual void BeginPlay() override;
 
 public:
@@ -58,6 +62,8 @@ public:
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
 private:
+	const FName WeaponSocketName = "WeaponSocket";
+
 	void MoveForward(float Value);
 
 	void MoveRight(float Value);
@@ -72,4 +78,6 @@ private:
 
 	UFUNCTION()
 	void OnGroundLanded(const FHitResult& HitResult);
+
+	void SpawnWeapon() const;
 };
