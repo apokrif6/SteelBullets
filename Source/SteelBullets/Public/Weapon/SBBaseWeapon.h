@@ -14,6 +14,7 @@ class STEELBULLETS_API ASBBaseWeapon : public AActor
 public:
 	ASBBaseWeapon();
 
+	virtual void Fire();
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	USkeletalMeshComponent* WeaponMesh;

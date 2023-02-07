@@ -22,6 +22,8 @@ ASBBaseCharacter::ASBBaseCharacter(const FObjectInitializer& ObjectInitializer)
 
 	HealthTextRenderComponent = CreateDefaultSubobject<UTextRenderComponent>("HealthTextRenderComponent");
 	HealthTextRenderComponent->SetupAttachment(GetRootComponent());
+
+	WeaponComponent = CreateDefaultSubobject<USBWeaponComponent>("WeaponComponent");
 }
 
 void ASBBaseCharacter::BeginPlay()
@@ -33,8 +35,6 @@ void ASBBaseCharacter::BeginPlay()
 	HealthComponent->OnDeath.AddUObject(this, &ASBBaseCharacter::OnDeath);
 
 	LandedDelegate.AddDynamic(this, &ASBBaseCharacter::OnGroundLanded);
-
-	SpawnWeapon();
 }
 
 void ASBBaseCharacter::Tick(float DeltaTime)
@@ -54,6 +54,7 @@ void ASBBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ASBBaseCharacter::Jump);
 	PlayerInputComponent->BindAction("Sprint", IE_Pressed, this, &ASBBaseCharacter::StartSprint);
 	PlayerInputComponent->BindAction("Sprint", IE_Released, this, &ASBBaseCharacter::StopSprint);
+	PlayerInputComponent->BindAction("Fire", IE_Pressed, WeaponComponent, &USBWeaponComponent::Fire);
 }
 
 void ASBBaseCharacter::MoveForward(float Value)
@@ -118,18 +119,4 @@ void ASBBaseCharacter::OnGroundLanded(const FHitResult& HitResult)
 
 	const float DamageToDeal = FMath::GetMappedRangeValueClamped(FallingDamageVelocity, FallingDamage, FallingVelocity);
 	TakeDamage(DamageToDeal, FDamageEvent{}, nullptr, nullptr);
-}
-
-void ASBBaseCharacter::SpawnWeapon() const
-{
-	UWorld* World = GetWorld();
-
-	if (!World) return;
-	
-	const auto Weapon = World->SpawnActor<ASBBaseWeapon>(WeaponClass);
-
-	if (!Weapon) return;
-
-	const FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, false);
-	Weapon->AttachToComponent(GetMesh(), AttachmentRules, WeaponSocketName);
 }

@@ -15,3 +15,11 @@ void ASBBaseWeapon::BeginPlay()
 {
 	Super::BeginPlay();
 }
+
+void ASBBaseWeapon::Fire()
+{
+	if (!GEngine) return;
+
+
+	GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, "FIRE!");
+}

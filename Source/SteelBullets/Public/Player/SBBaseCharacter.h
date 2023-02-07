@@ -5,10 +5,10 @@
 #include "CoreMinimal.h"
 #include "Camera/CameraComponent.h"
 #include "Components/SBHealthComponent.h"
+#include "Components/SBWeaponComponent.h"
 #include "Components/TextRenderComponent.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/SpringArmComponent.h"
-#include "Weapon/SBBaseWeapon.h"
 #include "SBBaseCharacter.generated.h"
 
 UCLASS()
@@ -36,6 +36,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	UTextRenderComponent* HealthTextRenderComponent;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+	USBWeaponComponent* WeaponComponent;
+
 	UPROPERTY(EditDefaultsOnly, Category = "Animations")
 	UAnimMontage* DeathAnimMontage;
 
@@ -44,9 +47,6 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Damage")
 	FVector2D FallingDamage = FVector2D(10.0f, 50.0f);
-
-	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
-	TSubclassOf<ASBBaseWeapon> WeaponClass;
 
 	virtual void BeginPlay() override;
 
@@ -62,8 +62,6 @@ public:
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
 private:
-	const FName WeaponSocketName = "WeaponSocket";
-
 	void MoveForward(float Value);
 
 	void MoveRight(float Value);
@@ -78,6 +76,4 @@ private:
 
 	UFUNCTION()
 	void OnGroundLanded(const FHitResult& HitResult);
-
-	void SpawnWeapon() const;
 };
