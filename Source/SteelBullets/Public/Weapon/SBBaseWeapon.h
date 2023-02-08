@@ -23,9 +23,12 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Features")
 	float ShotDistance = 1500.0f;
 	
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Features", Meta = (ClampMin = 0.f))
+    float ShotDamage = 30.f;
+
 	virtual void BeginPlay() override;
 
-	void Shot() const;
+	void Shot();
 	
 private:
 	FName MuzzleSocketName = "MuzzleSocket";
@@ -39,4 +42,6 @@ private:
 	bool GetTraceData(FVector& TraceStart, FVector& TraceEnd) const;
 
 	void MakeHit(FHitResult& HitResult, const FVector& TraceStart, const FVector& TraceEnd) const;
+
+	void MakeDamage(const FHitResult& HitResult);
 };

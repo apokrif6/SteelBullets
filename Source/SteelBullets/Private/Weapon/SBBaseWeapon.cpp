@@ -23,7 +23,7 @@ void ASBBaseWeapon::Fire()
 	Shot();
 }
 
-void ASBBaseWeapon::Shot() const
+void ASBBaseWeapon::Shot()
 {
 	if (!GetWorld()) return;
 
@@ -35,6 +35,7 @@ void ASBBaseWeapon::Shot() const
 
 	if (HitResult.bBlockingHit)
 	{
+		MakeDamage(HitResult);
 		DrawDebugLine(GetWorld(), GetMuzzleWorldLocation(), HitResult.ImpactPoint,
 		              FColor::Orange, false, 1.0f, 0, 3.0f);
 		DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 10.f, 24, FColor::Orange, false, 5.0f);
@@ -87,4 +88,13 @@ void ASBBaseWeapon::MakeHit(FHitResult& HitResult, const FVector& TraceStart, co
 	FCollisionQueryParams CollisionQueryParams;
 	CollisionQueryParams.AddIgnoredActor(GetOwner());
 	GetWorld()->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, ECC_Visibility, CollisionQueryParams);
+}
+
+void ASBBaseWeapon::MakeDamage(const FHitResult& HitResult)
+{
+	const auto HitActor = HitResult.GetActor();
+    if (!HitActor) return;
+    
+    HitActor->TakeDamage(ShotDamage, FDamageEvent{}, GetPlayerController(), this);
+    GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Orange, "Hit!");
 }

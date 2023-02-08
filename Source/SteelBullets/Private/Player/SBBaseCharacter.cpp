@@ -3,6 +3,7 @@
 
 #include "Player/SBBaseCharacter.h"
 #include "Camera/CameraComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "Components/SBCharacterMovementComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
@@ -109,6 +110,8 @@ void ASBBaseCharacter::OnDeath()
 	GetCharacterMovement()->DisableMovement();
 
 	SetLifeSpan(5.0f);
+
+	GetCapsuleComponent()->SetCollisionResponseToAllChannels(ECR_Ignore);
 }
 
 void ASBBaseCharacter::OnGroundLanded(const FHitResult& HitResult)
