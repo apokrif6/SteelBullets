@@ -19,7 +19,7 @@ void USBWeaponComponent::BeginPlay()
 
 void USBWeaponComponent::SpawnWeapon()
 {
-	const ACharacter* Character = Cast<ACharacter>(GetOwner());
+	ACharacter* Character = Cast<ACharacter>(GetOwner());
 	if (!Character) return;
 
 	UWorld* World = GetWorld();
@@ -30,6 +30,7 @@ void USBWeaponComponent::SpawnWeapon()
 
 	const FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, false);
 	Weapon->AttachToComponent(Character->GetMesh(), AttachmentRules, WeaponSocketName);
+	Weapon->SetOwner(Character);
 }
 
 void USBWeaponComponent::Fire()

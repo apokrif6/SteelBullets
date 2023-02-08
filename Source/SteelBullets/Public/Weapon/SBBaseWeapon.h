@@ -15,9 +15,18 @@ public:
 	ASBBaseWeapon();
 
 	virtual void Fire();
+	
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	USkeletalMeshComponent* WeaponMesh;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Features")
+	float ShotDistance = 1500.0f;
+	
 	virtual void BeginPlay() override;
+
+	void Shot();
+	
+private:
+	FName MuzzleSocketName = "MuzzleSocket";
 };
