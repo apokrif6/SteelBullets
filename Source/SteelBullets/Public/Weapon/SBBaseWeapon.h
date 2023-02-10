@@ -30,7 +30,10 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Features", Meta = (ClampMin = 0.1f))
 	float DelayBetweenShots = 0.3f;
-	
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Features", Meta = (ClampMin = 0.f))
+	float BulletSpread = 1.5f;
+
 	virtual void BeginPlay() override;
 
 	void Shot();
@@ -41,7 +44,7 @@ private:
 	APlayerController* GetPlayerController() const;
 
 	FTimerHandle ShotTimerHandle;
-	
+
 	bool GetPlayerViewPoint(FVector& ViewLocation, FRotator& ViewRotation) const;
 
 	FVector GetMuzzleWorldLocation() const;

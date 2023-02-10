@@ -85,7 +85,8 @@ bool ASBBaseWeapon::GetTraceData(FVector& TraceStart, FVector& TraceEnd) const
 	if (!GetPlayerViewPoint(CameraViewLocation, CameraViewRotation)) return false;
 
 	TraceStart = CameraViewLocation;
-	const FVector ShotDirection = CameraViewRotation.Vector();
+	const float HalfRadius = FMath::DegreesToRadians(BulletSpread);
+	const FVector ShotDirection = FMath::VRandCone(CameraViewRotation.Vector(), HalfRadius);
 	TraceEnd = TraceStart + ShotDirection * ShotDistance;
 
 	return true;
