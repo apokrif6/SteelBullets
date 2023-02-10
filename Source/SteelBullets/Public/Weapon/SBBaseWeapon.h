@@ -14,27 +14,34 @@ class STEELBULLETS_API ASBBaseWeapon : public AActor
 public:
 	ASBBaseWeapon();
 
-	virtual void Fire();
-	
+	virtual void StartFire();
+
+	virtual void StopFire();
+
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	USkeletalMeshComponent* WeaponMesh;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Features")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Features")
 	float ShotDistance = 1500.0f;
-	
-    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Features", Meta = (ClampMin = 0.f))
-    float ShotDamage = 30.f;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Features", Meta = (ClampMin = 0.f))
+	float ShotDamage = 30.f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Features", Meta = (ClampMin = 0.1f))
+	float DelayBetweenShots = 0.3f;
+	
 	virtual void BeginPlay() override;
 
 	void Shot();
-	
+
 private:
 	FName MuzzleSocketName = "MuzzleSocket";
 
 	APlayerController* GetPlayerController() const;
 
+	FTimerHandle ShotTimerHandle;
+	
 	bool GetPlayerViewPoint(FVector& ViewLocation, FRotator& ViewRotation) const;
 
 	FVector GetMuzzleWorldLocation() const;

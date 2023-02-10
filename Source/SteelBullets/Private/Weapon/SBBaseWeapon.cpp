@@ -18,10 +18,18 @@ void ASBBaseWeapon::BeginPlay()
 	Super::BeginPlay();
 }
 
-void ASBBaseWeapon::Fire()
+void ASBBaseWeapon::StartFire()
 {
 	Shot();
+
+	GetWorldTimerManager().SetTimer(ShotTimerHandle, this, &ASBBaseWeapon::Shot, DelayBetweenShots, true);
 }
+
+void ASBBaseWeapon::StopFire()
+{
+	GetWorldTimerManager().ClearTimer(ShotTimerHandle);
+}
+
 
 void ASBBaseWeapon::Shot()
 {

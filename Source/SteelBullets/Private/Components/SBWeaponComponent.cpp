@@ -33,9 +33,16 @@ void USBWeaponComponent::SpawnWeapon()
 	Weapon->SetOwner(Character);
 }
 
-void USBWeaponComponent::Fire()
+void USBWeaponComponent::StartFire()
 {
 	if (!Weapon) return;
 
-	Weapon->Fire();
+	Weapon->StartFire();
+}
+
+void USBWeaponComponent::StopFire()
+{
+	if (!Weapon) return;
+	
+	Weapon->StopFire();
 }

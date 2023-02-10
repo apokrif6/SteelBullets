@@ -14,7 +14,9 @@ class STEELBULLETS_API USBWeaponComponent : public UActorComponent
 public:
 	USBWeaponComponent();
 
-	void Fire();
+	void StartFire();
+
+	void StopFire();
 
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
