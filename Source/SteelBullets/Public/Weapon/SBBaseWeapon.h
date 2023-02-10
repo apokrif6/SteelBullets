@@ -28,30 +28,22 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Features", Meta = (ClampMin = 0.f))
 	float ShotDamage = 30.f;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Features", Meta = (ClampMin = 0.1f))
-	float DelayBetweenShots = 0.3f;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Features", Meta = (ClampMin = 0.f))
-	float BulletSpread = 1.5f;
-
 	virtual void BeginPlay() override;
 
-	void Shot();
+	virtual void Shot();
+
+	bool GetPlayerViewPoint(FVector& ViewLocation, FRotator& ViewRotation) const;
+
+	FVector GetMuzzleWorldLocation() const;
+
+	void MakeHit(FHitResult& HitResult, const FVector& TraceStart, const FVector& TraceEnd) const;
+
+	void MakeDamage(const FHitResult& HitResult);
 
 private:
 	FName MuzzleSocketName = "MuzzleSocket";
 
 	APlayerController* GetPlayerController() const;
 
-	FTimerHandle ShotTimerHandle;
-
-	bool GetPlayerViewPoint(FVector& ViewLocation, FRotator& ViewRotation) const;
-
-	FVector GetMuzzleWorldLocation() const;
-
-	bool GetTraceData(FVector& TraceStart, FVector& TraceEnd) const;
-
-	void MakeHit(FHitResult& HitResult, const FVector& TraceStart, const FVector& TraceEnd) const;
-
-	void MakeDamage(const FHitResult& HitResult);
+	virtual bool GetTraceData(FVector& TraceStart, FVector& TraceEnd) const;
 };

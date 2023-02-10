@@ -20,39 +20,15 @@ void ASBBaseWeapon::BeginPlay()
 
 void ASBBaseWeapon::StartFire()
 {
-	Shot();
-
-	GetWorldTimerManager().SetTimer(ShotTimerHandle, this, &ASBBaseWeapon::Shot, DelayBetweenShots, true);
 }
 
 void ASBBaseWeapon::StopFire()
 {
-	GetWorldTimerManager().ClearTimer(ShotTimerHandle);
 }
 
 
 void ASBBaseWeapon::Shot()
 {
-	if (!GetWorld()) return;
-
-	FVector TraceStart, TraceEnd;
-	if (!GetTraceData(TraceStart, TraceEnd)) return;
-
-	FHitResult HitResult;
-	MakeHit(HitResult, TraceStart, TraceEnd);
-
-	if (HitResult.bBlockingHit)
-	{
-		MakeDamage(HitResult);
-		DrawDebugLine(GetWorld(), GetMuzzleWorldLocation(), HitResult.ImpactPoint,
-		              FColor::Orange, false, 1.0f, 0, 3.0f);
-		DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 10.f, 24, FColor::Orange, false, 5.0f);
-	}
-	else
-	{
-		DrawDebugLine(GetWorld(), GetMuzzleWorldLocation(), TraceEnd,
-		              FColor::Orange, false, 1.0f, 0);
-	}
 }
 
 APlayerController* ASBBaseWeapon::GetPlayerController() const
@@ -85,8 +61,7 @@ bool ASBBaseWeapon::GetTraceData(FVector& TraceStart, FVector& TraceEnd) const
 	if (!GetPlayerViewPoint(CameraViewLocation, CameraViewRotation)) return false;
 
 	TraceStart = CameraViewLocation;
-	const float HalfRadius = FMath::DegreesToRadians(BulletSpread);
-	const FVector ShotDirection = FMath::VRandCone(CameraViewRotation.Vector(), HalfRadius);
+	const FVector ShotDirection = CameraViewRotation.Vector();
 	TraceEnd = TraceStart + ShotDirection * ShotDistance;
 
 	return true;
@@ -102,8 +77,8 @@ void ASBBaseWeapon::MakeHit(FHitResult& HitResult, const FVector& TraceStart, co
 void ASBBaseWeapon::MakeDamage(const FHitResult& HitResult)
 {
 	const auto HitActor = HitResult.GetActor();
-    if (!HitActor) return;
-    
-    HitActor->TakeDamage(ShotDamage, FDamageEvent{}, GetPlayerController(), this);
-    GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Orange, "Hit!");
+	if (!HitActor) return;
+
+	HitActor->TakeDamage(ShotDamage, FDamageEvent{}, GetPlayerController(), this);
+	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Orange, "Hit!");
 }
