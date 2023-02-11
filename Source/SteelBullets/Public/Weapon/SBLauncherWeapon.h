@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "SBLauncherProjectile.h"
 #include "Weapon/SBBaseWeapon.h"
 #include "SBLauncherWeapon.generated.h"
 
@@ -17,5 +18,8 @@ public:
 	virtual void StopFire() override;
 
 protected:
+	UPROPERTY(EditDefaultsOnly, Category = "Projectile")
+	TSubclassOf<ASBLauncherProjectile> ProjectileClass;
+	
 	virtual void Shot() override;
 };

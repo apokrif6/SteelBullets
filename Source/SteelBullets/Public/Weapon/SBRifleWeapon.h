@@ -21,6 +21,9 @@ protected:
 	float DelayBetweenShots = 0.3f;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Features", Meta = (ClampMin = 0.f))
+	float ShotDamage = 30.f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Features", Meta = (ClampMin = 0.f))
 	float BulletSpread = 1.5f;
 
 	virtual void Shot() override;
@@ -29,4 +32,6 @@ private:
 	FTimerHandle ShotTimerHandle;
 
 	virtual bool GetTraceData(FVector& TraceStart, FVector& TraceEnd) const override;
+
+	void MakeDamage(const FHitResult& HitResult);
 };

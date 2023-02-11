@@ -73,12 +73,3 @@ void ASBBaseWeapon::MakeHit(FHitResult& HitResult, const FVector& TraceStart, co
 	CollisionQueryParams.AddIgnoredActor(GetOwner());
 	GetWorld()->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, ECC_Visibility, CollisionQueryParams);
 }
-
-void ASBBaseWeapon::MakeDamage(const FHitResult& HitResult)
-{
-	const auto HitActor = HitResult.GetActor();
-	if (!HitActor) return;
-
-	HitActor->TakeDamage(ShotDamage, FDamageEvent{}, GetPlayerController(), this);
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Orange, "Hit!");
-}

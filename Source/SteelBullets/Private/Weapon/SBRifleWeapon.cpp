@@ -32,13 +32,13 @@ void ASBRifleWeapon::Shot()
 	{
 		MakeDamage(HitResult);
 		DrawDebugLine(GetWorld(), GetMuzzleWorldLocation(), HitResult.ImpactPoint,
-					  FColor::Orange, false, 1.0f, 0, 3.0f);
+		              FColor::Orange, false, 1.0f, 0, 3.0f);
 		DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 10.f, 24, FColor::Orange, false, 5.0f);
 	}
 	else
 	{
 		DrawDebugLine(GetWorld(), GetMuzzleWorldLocation(), TraceEnd,
-					  FColor::Orange, false, 1.0f, 0);
+		              FColor::Orange, false, 1.0f, 0);
 	}
 }
 
@@ -54,4 +54,13 @@ bool ASBRifleWeapon::GetTraceData(FVector& TraceStart, FVector& TraceEnd) const
 	TraceEnd = TraceStart + ShotDirection * ShotDistance;
 
 	return true;
+}
+
+void ASBRifleWeapon::MakeDamage(const FHitResult& HitResult)
+{
+	const auto HitActor = HitResult.GetActor();
+	if (!HitActor) return;
+
+	HitActor->TakeDamage(ShotDamage, FDamageEvent{}, GetPlayerController(), this);
+	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Orange, "Hit!");
 }
