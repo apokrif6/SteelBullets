@@ -24,6 +24,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
 	TArray<TSubclassOf<ASBBaseWeapon>> WeaponClasses;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Animations")
+	UAnimMontage* EquipAnimMontage;
+
 	virtual void BeginPlay() override;
 
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
@@ -47,4 +50,10 @@ private:
 	                          const FName& SocketName);
 
 	void EquipWeapon(int32 WeaponIndex);
+
+	void PlayAnimMontage(UAnimMontage* AnimMontage) const;
+
+	void InitializeAnimations();
+
+	void OnEquipFinished(USkeletalMeshComponent* MeshComponent);
 };

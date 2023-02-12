@@ -2,6 +2,8 @@
 
 
 #include "Components/SBWeaponComponent.h"
+
+#include "Animations/SBEquipFinishedAnimNotify.h"
 #include "Player/SBBaseCharacter.h"
 #include "Weapon/SBBaseWeapon.h"
 
@@ -14,6 +16,7 @@ void USBWeaponComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
+	InitializeAnimations();
 	SpawnWeapons();
 	EquipWeapon(CurrentWeaponIndex);
 }
@@ -77,6 +80,8 @@ void USBWeaponComponent::EquipWeapon(int32 WeaponIndex)
 	CurrentWeapon = Weapons[WeaponIndex];
 
 	AttachWeaponToSocket(CurrentWeapon, Character->GetMesh(), WeaponSocketName);
+
+	PlayAnimMontage(EquipAnimMontage);
 }
 
 void USBWeaponComponent::StartFire()
@@ -99,4 +104,38 @@ void USBWeaponComponent::NextWeapon()
 	CurrentWeaponIndex = (CurrentWeaponIndex + 1) % Weapons.Num();
 
 	EquipWeapon(CurrentWeaponIndex);
+}
+
+void USBWeaponComponent::PlayAnimMontage(UAnimMontage* AnimMontage) const
+{
+	ACharacter* Character = Cast<ACharacter>(GetOwner());
+	if (!Character) return;
+
+	Character->PlayAnimMontage(AnimMontage);
+}
+
+void USBWeaponComponent::InitializeAnimations()
+{
+	if (!EquipAnimMontage) return;
+
+	const auto NotifyEvents = EquipAnimMontage->Notifies;
+
+	for (auto NotifyEvent : NotifyEvents)
+	{
+		const auto EquipFinishedNotify = Cast<USBEquipFinishedAnimNotify>(NotifyEvent.Notify);
+		if (!EquipFinishedNotify) continue;
+
+		EquipFinishedNotify->OnNotified.AddUObject(this, &USBWeaponComponent::OnEquipFinished);
+		break;
+	}
+}
+
+void USBWeaponComponent::OnEquipFinished(USkeletalMeshComponent* MeshComponent)
+{
+	ACharacter* Character = Cast<ACharacter>(GetOwner());
+	if (!Character) return;
+
+	if (Character->GetMesh() != MeshComponent) return;
+
+	GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, "Equip finished!");
 }
