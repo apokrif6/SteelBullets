@@ -14,10 +14,26 @@ void USBWeaponComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	SpawnWeapon();
+	SpawnWeapons();
+	EquipWeapon(CurrentWeaponIndex);
 }
 
-void USBWeaponComponent::SpawnWeapon()
+void USBWeaponComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
+
+	CurrentWeapon = nullptr;
+
+	for (auto Weapon : Weapons)
+	{
+		Weapon->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+		Weapon->Destroy();
+	}
+
+	Weapons.Empty();
+}
+
+void USBWeaponComponent::SpawnWeapons()
 {
 	ACharacter* Character = Cast<ACharacter>(GetOwner());
 	if (!Character) return;
@@ -25,24 +41,62 @@ void USBWeaponComponent::SpawnWeapon()
 	UWorld* World = GetWorld();
 	if (!World) return;
 
-	Weapon = World->SpawnActor<ASBBaseWeapon>(WeaponClass);
-	if (!Weapon) return;
+	for (auto WeaponClass : WeaponClasses)
+	{
+		auto Weapon = World->SpawnActor<ASBBaseWeapon>(WeaponClass);
+		//TODO
+		//add exception for non creating weapon
+		if (!Weapon) continue;
 
+		Weapon->SetOwner(Character);
+		Weapons.Add(Weapon);
+
+		AttachWeaponToSocket(Weapon, Character->GetMesh(), ArmorySocketName);
+	}
+}
+
+void USBWeaponComponent::AttachWeaponToSocket(ASBBaseWeapon* Weapon, USceneComponent* SceneComponent,
+                                              const FName& SocketName)
+{
 	const FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, false);
-	Weapon->AttachToComponent(Character->GetMesh(), AttachmentRules, WeaponSocketName);
-	Weapon->SetOwner(Character);
+
+	Weapon->AttachToComponent(SceneComponent, AttachmentRules, SocketName);
+}
+
+void USBWeaponComponent::EquipWeapon(int32 WeaponIndex)
+{
+	ACharacter* Character = Cast<ACharacter>(GetOwner());
+	if (!Character) return;
+
+	if (CurrentWeapon)
+	{
+		CurrentWeapon->StopFire();
+		AttachWeaponToSocket(CurrentWeapon, Character->GetMesh(), ArmorySocketName);
+	}
+
+	CurrentWeapon = Weapons[WeaponIndex];
+
+	AttachWeaponToSocket(CurrentWeapon, Character->GetMesh(), WeaponSocketName);
 }
 
 void USBWeaponComponent::StartFire()
 {
-	if (!Weapon) return;
+	if (!CurrentWeapon) return;
 
-	Weapon->StartFire();
+	CurrentWeapon->StartFire();
 }
 
 void USBWeaponComponent::StopFire()
 {
-	if (!Weapon) return;
-	
-	Weapon->StopFire();
+	if (!CurrentWeapon) return;
+
+	CurrentWeapon->StopFire();
+}
+
+void USBWeaponComponent::NextWeapon()
+{
+	//limit index to array range
+	CurrentWeaponIndex = (CurrentWeaponIndex + 1) % Weapons.Num();
+
+	EquipWeapon(CurrentWeaponIndex);
 }

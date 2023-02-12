@@ -57,6 +57,7 @@ void ASBBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAction("Sprint", IE_Released, this, &ASBBaseCharacter::StopSprint);
 	PlayerInputComponent->BindAction("Fire", IE_Pressed, WeaponComponent, &USBWeaponComponent::StartFire);
 	PlayerInputComponent->BindAction("Fire", IE_Released, WeaponComponent, &USBWeaponComponent::StopFire);
+	PlayerInputComponent->BindAction("ChangeWeapon", IE_Pressed, WeaponComponent, &USBWeaponComponent::NextWeapon);
 }
 
 void ASBBaseCharacter::MoveForward(float Value)
@@ -106,6 +107,8 @@ void ASBBaseCharacter::OnHealthChanged(float Health)
 
 void ASBBaseCharacter::OnDeath()
 {
+	WeaponComponent->StopFire();
+	
 	PlayAnimMontage(DeathAnimMontage);
 
 	GetCharacterMovement()->DisableMovement();
