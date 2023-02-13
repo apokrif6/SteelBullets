@@ -40,6 +40,8 @@ private:
 
 	int32 CurrentWeaponIndex = 0;
 
+	bool bEquipWeaponInProgress = false;
+
 	const FName WeaponSocketName = "WeaponSocket";
 
 	const FName ArmorySocketName = "ArmorySocket";
@@ -56,4 +58,8 @@ private:
 	void InitializeAnimations();
 
 	void OnEquipFinished(USkeletalMeshComponent* MeshComponent);
+
+	bool CanFire() const;
+
+	bool CanEquip() const;
 };

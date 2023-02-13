@@ -81,25 +81,29 @@ void USBWeaponComponent::EquipWeapon(int32 WeaponIndex)
 
 	AttachWeaponToSocket(CurrentWeapon, Character->GetMesh(), WeaponSocketName);
 
+	bEquipWeaponInProgress = true;
+
 	PlayAnimMontage(EquipAnimMontage);
 }
 
 void USBWeaponComponent::StartFire()
 {
-	if (!CurrentWeapon) return;
+	if (!CanFire()) return;
 
 	CurrentWeapon->StartFire();
 }
 
 void USBWeaponComponent::StopFire()
 {
-	if (!CurrentWeapon) return;
+	if (!CanFire()) return;
 
 	CurrentWeapon->StopFire();
 }
 
 void USBWeaponComponent::NextWeapon()
 {
+	if (!CanEquip()) return;
+
 	//limit index to array range
 	CurrentWeaponIndex = (CurrentWeaponIndex + 1) % Weapons.Num();
 
@@ -133,9 +137,19 @@ void USBWeaponComponent::InitializeAnimations()
 void USBWeaponComponent::OnEquipFinished(USkeletalMeshComponent* MeshComponent)
 {
 	ACharacter* Character = Cast<ACharacter>(GetOwner());
-	if (!Character) return;
+	if (!Character || Character->GetMesh() != MeshComponent) return;
 
-	if (Character->GetMesh() != MeshComponent) return;
+	bEquipWeaponInProgress = false;
+}
 
-	GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, "Equip finished!");
+bool USBWeaponComponent::CanFire() const
+{
+	if (!CurrentWeapon || bEquipWeaponInProgress) return false;
+
+	return true;
+}
+
+bool USBWeaponComponent::CanEquip() const
+{
+	return !bEquipWeaponInProgress;
 }
