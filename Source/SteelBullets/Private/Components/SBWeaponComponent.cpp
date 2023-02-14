@@ -4,6 +4,7 @@
 #include "Components/SBWeaponComponent.h"
 
 #include "Animations/SBEquipFinishedAnimNotify.h"
+#include "Animations/SBReloadFinishedAnimNotify.h"
 #include "Player/SBBaseCharacter.h"
 #include "Weapon/SBBaseWeapon.h"
 
@@ -44,9 +45,9 @@ void USBWeaponComponent::SpawnWeapons()
 	UWorld* World = GetWorld();
 	if (!World) return;
 
-	for (auto WeaponClass : WeaponClasses)
+	for (auto WeaponDataItem : WeaponData)
 	{
-		auto Weapon = World->SpawnActor<ASBBaseWeapon>(WeaponClass);
+		auto Weapon = World->SpawnActor<ASBBaseWeapon>(WeaponDataItem.WeaponClass);
 		//TODO
 		//add exception for non creating weapon
 		if (!Weapon) continue;
@@ -68,6 +69,13 @@ void USBWeaponComponent::AttachWeaponToSocket(ASBBaseWeapon* Weapon, USceneCompo
 
 void USBWeaponComponent::EquipWeapon(int32 WeaponIndex)
 {
+	if (WeaponIndex < 0 || WeaponIndex >= WeaponData.Num())
+	{
+		//TODO
+		//Add exception
+		return;
+	}
+
 	ACharacter* Character = Cast<ACharacter>(GetOwner());
 	if (!Character) return;
 
@@ -78,6 +86,13 @@ void USBWeaponComponent::EquipWeapon(int32 WeaponIndex)
 	}
 
 	CurrentWeapon = Weapons[WeaponIndex];
+
+	const auto CurrentWeaponData = WeaponData.FindByPredicate([&](const FWeaponData& Data)
+	{
+		return Data.WeaponClass == CurrentWeapon->GetClass();
+	});
+
+	CurrentWeaponReloadAnimMontage = CurrentWeaponData ? CurrentWeaponData->ReloadAnimMontage : nullptr;
 
 	AttachWeaponToSocket(CurrentWeapon, Character->GetMesh(), WeaponSocketName);
 
@@ -110,6 +125,15 @@ void USBWeaponComponent::NextWeapon()
 	EquipWeapon(CurrentWeaponIndex);
 }
 
+void USBWeaponComponent::Reload()
+{
+	if (!CanReload()) return;
+
+	bReloadWeaponInProgress = true;
+
+	PlayAnimMontage(CurrentWeaponReloadAnimMontage);
+}
+
 void USBWeaponComponent::PlayAnimMontage(UAnimMontage* AnimMontage) const
 {
 	ACharacter* Character = Cast<ACharacter>(GetOwner());
@@ -120,17 +144,18 @@ void USBWeaponComponent::PlayAnimMontage(UAnimMontage* AnimMontage) const
 
 void USBWeaponComponent::InitializeAnimations()
 {
-	if (!EquipAnimMontage) return;
-
-	const auto NotifyEvents = EquipAnimMontage->Notifies;
-
-	for (auto NotifyEvent : NotifyEvents)
+	auto EquipFinishedNotify = FindNotifyByClass<USBEquipFinishedAnimNotify>(EquipAnimMontage);
+	if (EquipFinishedNotify)
 	{
-		const auto EquipFinishedNotify = Cast<USBEquipFinishedAnimNotify>(NotifyEvent.Notify);
-		if (!EquipFinishedNotify) continue;
-
 		EquipFinishedNotify->OnNotified.AddUObject(this, &USBWeaponComponent::OnEquipFinished);
-		break;
+	};
+
+	for (auto WeaponDataItem : WeaponData)
+	{
+		auto ReloadFinishedNotify = FindNotifyByClass<USBReloadFinishedAnimNotify>(WeaponDataItem.ReloadAnimMontage);
+		if (!ReloadFinishedNotify) continue;
+
+		ReloadFinishedNotify->OnNotified.AddUObject(this, &USBWeaponComponent::OnReloadFinished);
 	}
 }
 
@@ -142,14 +167,25 @@ void USBWeaponComponent::OnEquipFinished(USkeletalMeshComponent* MeshComponent)
 	bEquipWeaponInProgress = false;
 }
 
+void USBWeaponComponent::OnReloadFinished(USkeletalMeshComponent* MeshComponent)
+{
+	ACharacter* Character = Cast<ACharacter>(GetOwner());
+	if (!Character || Character->GetMesh() != MeshComponent) return;
+
+	bReloadWeaponInProgress = false;
+}
+
 bool USBWeaponComponent::CanFire() const
 {
-	if (!CurrentWeapon || bEquipWeaponInProgress) return false;
-
-	return true;
+	return CurrentWeapon || !bEquipWeaponInProgress || !bReloadWeaponInProgress;
 }
 
 bool USBWeaponComponent::CanEquip() const
 {
-	return !bEquipWeaponInProgress;
+	return !bEquipWeaponInProgress && !bReloadWeaponInProgress;
+}
+
+bool USBWeaponComponent::CanReload() const
+{
+	return CurrentWeapon || !bEquipWeaponInProgress || !bReloadWeaponInProgress;
 }

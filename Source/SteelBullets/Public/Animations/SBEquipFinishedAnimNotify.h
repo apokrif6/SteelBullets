@@ -3,18 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Animation/AnimNotifies/AnimNotify.h"
+#include "SBAnimNotify.h"
 #include "SBEquipFinishedAnimNotify.generated.h"
 
-DECLARE_MULTICAST_DELEGATE_OneParam(FOnNotified, USkeletalMeshComponent*);
-
 UCLASS()
-class STEELBULLETS_API USBEquipFinishedAnimNotify : public UAnimNotify
+class STEELBULLETS_API USBEquipFinishedAnimNotify : public USBAnimNotify
 {
 	GENERATED_BODY()
-
-public:
-	virtual void Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation) override;
-
-	FOnNotified OnNotified;
 };
