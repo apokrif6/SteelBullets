@@ -16,7 +16,7 @@ void ASBLauncherWeapon::StopFire()
 void ASBLauncherWeapon::Shot()
 {
 	UWorld* World = GetWorld();
-	if (!World) return;
+	if (!World || IsAmmunitionEmpty()) return;
 
 	FVector TraceStart, TraceEnd;
 	if (!GetTraceData(TraceStart, TraceEnd)) return;
@@ -35,4 +35,6 @@ void ASBLauncherWeapon::Shot()
 	Projectile->SetLaunchDirection(Direction);
 	Projectile->SetOwner(GetOwner());
 	Projectile->FinishSpawning(SpawnTransform);
+
+	DecreaseAmmunition();
 }

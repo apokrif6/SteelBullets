@@ -6,6 +6,21 @@
 #include "GameFramework/Actor.h"
 #include "SBBaseWeapon.generated.h"
 
+USTRUCT(BlueprintType)
+struct FAmmunitionData
+{
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
+	int32 Bullets;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon", Meta = (EditCondition = "!Infinite"))
+	int32 Clips;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
+	bool Infinite;
+};
+
 UCLASS()
 class STEELBULLETS_API ASBBaseWeapon : public AActor
 {
@@ -25,6 +40,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Features")
 	float ShotDistance = 1500.0f;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Features")
+	FAmmunitionData DefaultAmmunition{15, 10, false};
+
 	virtual void BeginPlay() override;
 
 	virtual void Shot();
@@ -39,6 +57,20 @@ protected:
 
 	APlayerController* GetPlayerController() const;
 
+	void IncreaseAmmunition();
+
+	void DecreaseAmmunition();
+
+	bool IsAmmunitionEmpty() const;
+
+	void ChangeClip();
+
+	bool IsClipEmpty() const;
+
+	void LogAmmunition();
+
 private:
 	FName MuzzleSocketName = "MuzzleSocket";
+
+	FAmmunitionData CurrentAmmunition;
 };

@@ -20,26 +20,36 @@ void ASBRifleWeapon::StopFire()
 
 void ASBRifleWeapon::Shot()
 {
-	if (!GetWorld()) return;
+	UWorld* World = GetWorld();
+	if (!World || IsAmmunitionEmpty())
+	{
+		StopFire();
+		return;
+	}
 
 	FVector TraceStart, TraceEnd;
-	if (!GetTraceData(TraceStart, TraceEnd)) return;
-
+	if (!GetTraceData(TraceStart, TraceEnd))
+	{
+		StopFire();
+		return;
+	}
 	FHitResult HitResult;
 	MakeHit(HitResult, TraceStart, TraceEnd);
 
 	if (HitResult.bBlockingHit)
 	{
 		MakeDamage(HitResult);
-		DrawDebugLine(GetWorld(), GetMuzzleWorldLocation(), HitResult.ImpactPoint,
+		DrawDebugLine(World, GetMuzzleWorldLocation(), HitResult.ImpactPoint,
 		              FColor::Orange, false, 1.0f, 0, 3.0f);
-		DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 10.f, 24, FColor::Orange, false, 5.0f);
+		DrawDebugSphere(World, HitResult.ImpactPoint, 10.f, 24, FColor::Orange, false, 5.0f);
 	}
 	else
 	{
-		DrawDebugLine(GetWorld(), GetMuzzleWorldLocation(), TraceEnd,
+		DrawDebugLine(World, GetMuzzleWorldLocation(), TraceEnd,
 		              FColor::Orange, false, 1.0f, 0);
 	}
+
+	DecreaseAmmunition();
 }
 
 bool ASBRifleWeapon::GetTraceData(FVector& TraceStart, FVector& TraceEnd) const

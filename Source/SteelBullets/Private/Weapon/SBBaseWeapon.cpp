@@ -16,6 +16,8 @@ ASBBaseWeapon::ASBBaseWeapon()
 void ASBBaseWeapon::BeginPlay()
 {
 	Super::BeginPlay();
+
+	CurrentAmmunition = DefaultAmmunition;
 }
 
 void ASBBaseWeapon::StartFire()
@@ -72,4 +74,46 @@ void ASBBaseWeapon::MakeHit(FHitResult& HitResult, const FVector& TraceStart, co
 	FCollisionQueryParams CollisionQueryParams;
 	CollisionQueryParams.AddIgnoredActor(GetOwner());
 	GetWorld()->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, ECC_Visibility, CollisionQueryParams);
+}
+
+void ASBBaseWeapon::IncreaseAmmunition()
+{
+}
+
+void ASBBaseWeapon::DecreaseAmmunition()
+{
+	CurrentAmmunition.Bullets--;
+
+	LogAmmunition();
+
+	if (IsClipEmpty() && !IsAmmunitionEmpty())
+	{
+		ChangeClip();
+	}
+}
+
+bool ASBBaseWeapon::IsAmmunitionEmpty() const
+{
+	return IsClipEmpty() && CurrentAmmunition.Clips == 0 && !CurrentAmmunition.Infinite;
+}
+
+void ASBBaseWeapon::ChangeClip()
+{
+	CurrentAmmunition.Bullets = DefaultAmmunition.Bullets;
+
+	if (CurrentAmmunition.Infinite) return;
+
+	CurrentAmmunition.Clips--;
+}
+
+bool ASBBaseWeapon::IsClipEmpty() const
+{
+	return CurrentAmmunition.Bullets == 0;
+}
+
+void ASBBaseWeapon::LogAmmunition()
+{
+	FString AmmunitionInfo = "Ammo " + FString::FromInt(CurrentAmmunition.Bullets) + " / ";
+	AmmunitionInfo += CurrentAmmunition.Infinite ? "Infinite" : FString::FromInt(CurrentAmmunition.Clips);
+	GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, AmmunitionInfo);
 }
