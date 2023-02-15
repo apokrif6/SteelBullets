@@ -52,6 +52,7 @@ void USBWeaponComponent::SpawnWeapons()
 		//add exception for non creating weapon
 		if (!Weapon) continue;
 
+		Weapon->OnClipEmpty.AddUObject(this, &USBWeaponComponent::OnEmptyClip);
 		Weapon->SetOwner(Character);
 		Weapons.Add(Weapon);
 
@@ -127,11 +128,7 @@ void USBWeaponComponent::NextWeapon()
 
 void USBWeaponComponent::Reload()
 {
-	if (!CanReload()) return;
-
-	bReloadWeaponInProgress = true;
-
-	PlayAnimMontage(CurrentWeaponReloadAnimMontage);
+	ChangeClip();
 }
 
 void USBWeaponComponent::PlayAnimMontage(UAnimMontage* AnimMontage) const
@@ -187,5 +184,24 @@ bool USBWeaponComponent::CanEquip() const
 
 bool USBWeaponComponent::CanReload() const
 {
-	return CurrentWeapon && !bEquipWeaponInProgress && !bReloadWeaponInProgress;
+	return CurrentWeapon && !bEquipWeaponInProgress && !bReloadWeaponInProgress && CurrentWeapon->CanReload();
+}
+
+void USBWeaponComponent::OnEmptyClip()
+{
+	ChangeClip();
+}
+
+void USBWeaponComponent::ChangeClip()
+{
+	if (!CanReload()) return;
+
+	CurrentWeapon->StopFire();
+	CurrentWeapon->ChangeClip();
+
+	bReloadWeaponInProgress = true;
+
+	PlayAnimMontage(CurrentWeaponReloadAnimMontage);
+
+	CurrentWeapon->ChangeClip();
 }

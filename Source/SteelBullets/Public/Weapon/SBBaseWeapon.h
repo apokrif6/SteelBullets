@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "SBBaseWeapon.generated.h"
 
+DECLARE_MULTICAST_DELEGATE(FOnClipEmpty);
+
 USTRUCT(BlueprintType)
 struct FAmmunitionData
 {
@@ -29,10 +31,16 @@ class STEELBULLETS_API ASBBaseWeapon : public AActor
 public:
 	ASBBaseWeapon();
 
+	FOnClipEmpty OnClipEmpty;
+
 	virtual void StartFire();
 
 	virtual void StopFire();
 
+	void ChangeClip();
+
+	bool CanReload() const;
+	
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	USkeletalMeshComponent* WeaponMesh;
@@ -62,8 +70,6 @@ protected:
 	void DecreaseAmmunition();
 
 	bool IsAmmunitionEmpty() const;
-
-	void ChangeClip();
 
 	bool IsClipEmpty() const;
 

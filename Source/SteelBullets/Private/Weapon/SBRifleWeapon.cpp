@@ -7,9 +7,9 @@
 
 void ASBRifleWeapon::StartFire()
 {
-	Shot();
-
 	GetWorldTimerManager().SetTimer(ShotTimerHandle, this, &ASBRifleWeapon::Shot, DelayBetweenShots, true);
+
+	Shot();
 }
 
 void ASBRifleWeapon::StopFire()

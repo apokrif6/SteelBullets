@@ -28,6 +28,22 @@ void ASBBaseWeapon::StopFire()
 {
 }
 
+void ASBBaseWeapon::ChangeClip()
+{
+	if (!CurrentAmmunition.Infinite)
+	{
+		if (CurrentAmmunition.Clips == 0) return;
+
+		CurrentAmmunition.Clips--;
+	}
+
+	CurrentAmmunition.Bullets = DefaultAmmunition.Bullets;
+}
+
+bool ASBBaseWeapon::CanReload() const
+{
+	return CurrentAmmunition.Bullets < DefaultAmmunition.Bullets && CurrentAmmunition.Clips > 0;
+}
 
 void ASBBaseWeapon::Shot()
 {
@@ -82,28 +98,22 @@ void ASBBaseWeapon::IncreaseAmmunition()
 
 void ASBBaseWeapon::DecreaseAmmunition()
 {
+	if (CurrentAmmunition.Bullets == 0) return;
+	
 	CurrentAmmunition.Bullets--;
 
 	LogAmmunition();
 
 	if (IsClipEmpty() && !IsAmmunitionEmpty())
 	{
-		ChangeClip();
+		StopFire();
+		OnClipEmpty.Broadcast();
 	}
 }
 
 bool ASBBaseWeapon::IsAmmunitionEmpty() const
 {
 	return IsClipEmpty() && CurrentAmmunition.Clips == 0 && !CurrentAmmunition.Infinite;
-}
-
-void ASBBaseWeapon::ChangeClip()
-{
-	CurrentAmmunition.Bullets = DefaultAmmunition.Bullets;
-
-	if (CurrentAmmunition.Infinite) return;
-
-	CurrentAmmunition.Clips--;
 }
 
 bool ASBBaseWeapon::IsClipEmpty() const
