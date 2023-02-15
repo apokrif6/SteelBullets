@@ -177,7 +177,7 @@ void USBWeaponComponent::OnReloadFinished(USkeletalMeshComponent* MeshComponent)
 
 bool USBWeaponComponent::CanFire() const
 {
-	return CurrentWeapon || !bEquipWeaponInProgress || !bReloadWeaponInProgress;
+	return CurrentWeapon && !bEquipWeaponInProgress && !bReloadWeaponInProgress;
 }
 
 bool USBWeaponComponent::CanEquip() const
@@ -187,5 +187,5 @@ bool USBWeaponComponent::CanEquip() const
 
 bool USBWeaponComponent::CanReload() const
 {
-	return CurrentWeapon || !bEquipWeaponInProgress || !bReloadWeaponInProgress;
+	return CurrentWeapon && !bEquipWeaponInProgress && !bReloadWeaponInProgress;
 }
