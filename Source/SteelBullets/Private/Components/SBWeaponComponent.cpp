@@ -3,6 +3,7 @@
 
 #include "Components/SBWeaponComponent.h"
 
+#include "Animations/AnimUtils.h"
 #include "Animations/SBEquipFinishedAnimNotify.h"
 #include "Animations/SBReloadFinishedAnimNotify.h"
 #include "Player/SBBaseCharacter.h"
@@ -141,18 +142,29 @@ void USBWeaponComponent::PlayAnimMontage(UAnimMontage* AnimMontage) const
 
 void USBWeaponComponent::InitializeAnimations()
 {
-	auto EquipFinishedNotify = FindNotifyByClass<USBEquipFinishedAnimNotify>(EquipAnimMontage);
+	const auto EquipFinishedNotify = AnimUtils::FindNotifyByClass<USBEquipFinishedAnimNotify>(EquipAnimMontage);
 	if (EquipFinishedNotify)
 	{
 		EquipFinishedNotify->OnNotified.AddUObject(this, &USBWeaponComponent::OnEquipFinished);
-	};
-
-	for (auto WeaponDataItem : WeaponData)
+	}
+	else
 	{
-		auto ReloadFinishedNotify = FindNotifyByClass<USBReloadFinishedAnimNotify>(WeaponDataItem.ReloadAnimMontage);
-		if (!ReloadFinishedNotify) continue;
+		UE_LOG(LogTemp, Error, TEXT("Equip animation is not set"));
+		checkNoEntry();
+	}
 
-		ReloadFinishedNotify->OnNotified.AddUObject(this, &USBWeaponComponent::OnReloadFinished);
+	for (const auto WeaponDataItem : WeaponData)
+	{
+		const auto ReloadFinishedNotify = AnimUtils::FindNotifyByClass<USBReloadFinishedAnimNotify>(WeaponDataItem.ReloadAnimMontage);
+		if (ReloadFinishedNotify)
+		{
+			ReloadFinishedNotify->OnNotified.AddUObject(this, &USBWeaponComponent::OnReloadFinished);
+		}
+		else
+		{
+			UE_LOG(LogTemp, Error, TEXT("Reload animation is not set"));
+			checkNoEntry();
+		}
 	}
 }
 

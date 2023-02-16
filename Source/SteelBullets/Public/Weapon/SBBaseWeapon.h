@@ -3,25 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "SBCoreTypes.h"
 #include "GameFramework/Actor.h"
 #include "SBBaseWeapon.generated.h"
-
-DECLARE_MULTICAST_DELEGATE(FOnClipEmpty);
-
-USTRUCT(BlueprintType)
-struct FAmmunitionData
-{
-	GENERATED_USTRUCT_BODY()
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
-	int32 Bullets;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon", Meta = (EditCondition = "!Infinite"))
-	int32 Clips;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
-	bool Infinite;
-};
 
 UCLASS()
 class STEELBULLETS_API ASBBaseWeapon : public AActor

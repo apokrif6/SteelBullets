@@ -3,11 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "SBCoreTypes.h"
 #include "Components/ActorComponent.h"
 #include "SBHealthComponent.generated.h"
-
-DECLARE_MULTICAST_DELEGATE_OneParam(FOnHealthChanged, float)
-DECLARE_MULTICAST_DELEGATE(FOnDeath)
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class STEELBULLETS_API USBHealthComponent : public UActorComponent

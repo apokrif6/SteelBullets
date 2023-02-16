@@ -3,20 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "SBCoreTypes.h"
 #include "Weapon/SBBaseWeapon.h"
 #include "SBWeaponComponent.generated.h"
-
-USTRUCT(BlueprintType)
-struct FWeaponData
-{
-	GENERATED_USTRUCT_BODY()
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
-	TSubclassOf<ASBBaseWeapon> WeaponClass;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Animations")
-	UAnimMontage* ReloadAnimMontage;
-};
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class STEELBULLETS_API USBWeaponComponent : public UActorComponent
@@ -89,25 +78,4 @@ private:
 	void OnEmptyClip();
 
 	void ChangeClip();
-	
-	template <typename T>
-	T* FindNotifyByClass(UAnimSequenceBase*);
 };
-
-template <typename T>
-T* USBWeaponComponent::FindNotifyByClass(UAnimSequenceBase* AnimSequenceBase)
-{
-	if (!AnimSequenceBase) return nullptr;
-
-	const auto NotifyEvents = AnimSequenceBase->Notifies;
-
-	for (auto NotifyEvent : NotifyEvents)
-	{
-		const auto AnimNotify = Cast<T>(NotifyEvent.Notify);
-		if (!AnimNotify) continue;
-
-		return AnimNotify;
-	}
-
-	return nullptr;
-}
