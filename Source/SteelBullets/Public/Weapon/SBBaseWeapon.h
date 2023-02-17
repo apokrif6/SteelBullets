@@ -24,7 +24,9 @@ public:
 	void ChangeClip();
 
 	bool CanReload() const;
-	
+
+	FWeaponUIData GetUIData() const;
+
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	USkeletalMeshComponent* WeaponMesh;
@@ -35,6 +37,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Features")
 	FAmmunitionData DefaultAmmunition{15, 10, false};
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
+	FWeaponUIData UIData;
+	
 	virtual void BeginPlay() override;
 
 	virtual void Shot();

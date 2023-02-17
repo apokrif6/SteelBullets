@@ -36,6 +36,15 @@ struct FAmmunitionData
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
 	bool Infinite;
 };
+
+USTRUCT(BlueprintType)
+struct FWeaponUIData
+{
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
+	UTexture2D* CrosshairIcon;
+};
 #pragma endregion WeaponComponent
 
 #pragma region HealthComponent

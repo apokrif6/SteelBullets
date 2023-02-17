@@ -45,6 +45,11 @@ bool ASBBaseWeapon::CanReload() const
 	return CurrentAmmunition.Bullets < DefaultAmmunition.Bullets && CurrentAmmunition.Clips > 0;
 }
 
+FWeaponUIData ASBBaseWeapon::GetUIData() const
+{
+	return UIData;
+}
+
 void ASBBaseWeapon::Shot()
 {
 }

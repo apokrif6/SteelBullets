@@ -132,6 +132,15 @@ void USBWeaponComponent::Reload()
 	ChangeClip();
 }
 
+bool USBWeaponComponent::GetWeaponUIData(FWeaponUIData& WeaponUIData) const
+{
+	if (!CurrentWeapon) return false;
+
+	WeaponUIData = CurrentWeapon->GetUIData();
+
+	return true;
+}
+
 void USBWeaponComponent::PlayAnimMontage(UAnimMontage* AnimMontage) const
 {
 	ACharacter* Character = Cast<ACharacter>(GetOwner());
@@ -155,7 +164,8 @@ void USBWeaponComponent::InitializeAnimations()
 
 	for (const auto WeaponDataItem : WeaponData)
 	{
-		const auto ReloadFinishedNotify = AnimUtils::FindNotifyByClass<USBReloadFinishedAnimNotify>(WeaponDataItem.ReloadAnimMontage);
+		const auto ReloadFinishedNotify = AnimUtils::FindNotifyByClass<USBReloadFinishedAnimNotify>(
+			WeaponDataItem.ReloadAnimMontage);
 		if (ReloadFinishedNotify)
 		{
 			ReloadFinishedNotify->OnNotified.AddUObject(this, &USBWeaponComponent::OnReloadFinished);
