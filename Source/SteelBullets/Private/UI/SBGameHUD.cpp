@@ -12,6 +12,17 @@ void ASBGameHUD::DrawHUD()
 	DrawCrossHair();
 }
 
+void ASBGameHUD::BeginPlay()
+{
+	Super::BeginPlay();
+
+	const auto PlayerHUDWidget = CreateWidget<USBPlayerHUDWidget>(GetWorld(), PlayerHUDWidgetClass);
+	if (PlayerHUDWidget)
+	{
+		PlayerHUDWidget->AddToViewport();
+	}
+}
+
 void ASBGameHUD::DrawCrossHair()
 {
 	const TInterval<float> Center(Canvas->SizeX / 2, Canvas->SizeY / 2);

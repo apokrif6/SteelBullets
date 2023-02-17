@@ -57,6 +57,11 @@ float USBHealthComponent::GetHealth() const
 	return Health;
 }
 
+float USBHealthComponent::GetHealthPercent() const
+{
+	return Health / MaxHealth;
+}
+
 bool USBHealthComponent::IsDead() const
 {
 	return Health <= 0.0f;
