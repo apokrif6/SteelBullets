@@ -141,6 +141,15 @@ bool USBWeaponComponent::GetWeaponUIData(FWeaponUIData& WeaponUIData) const
 	return true;
 }
 
+bool USBWeaponComponent::GetAmmunitionData(FAmmunitionData& AmmunitionData) const
+{
+	if (!CurrentWeapon) return false;
+
+	AmmunitionData = CurrentWeapon->GetAmmunitionData();
+
+	return true;
+}
+
 void USBWeaponComponent::PlayAnimMontage(UAnimMontage* AnimMontage) const
 {
 	ACharacter* Character = Cast<ACharacter>(GetOwner());

@@ -2,7 +2,6 @@
 
 
 #include "UI/SBPlayerHUDWidget.h"
-
 #include "Components/SBHealthComponent.h"
 #include "Components/SBWeaponComponent.h"
 
@@ -18,14 +17,30 @@ float USBPlayerHUDWidget::GetHealthPercent() const
 	return HealthComponent->GetHealthPercent();
 }
 
-bool USBPlayerHUDWidget::GetWeaponUIData(FWeaponUIData& WeaponUIData) const
+bool USBPlayerHUDWidget::GetCurrentWeaponUIData(FWeaponUIData& WeaponUIData) const
 {
-	const auto Player = GetOwningPlayerPawn();
-	if (!Player) return false;
-
-	const auto WeaponComponent = Cast<USBWeaponComponent>(
-		Player->GetComponentByClass(USBWeaponComponent::StaticClass()));
+	const auto WeaponComponent = GetWeaponComponent();
 	if (!WeaponComponent) return false;
 
 	return WeaponComponent->GetWeaponUIData(WeaponUIData);
+}
+
+bool USBPlayerHUDWidget::GetCurrentWeaponAmmunitionData(FAmmunitionData& AmmunitionData) const
+{
+	const auto WeaponComponent = GetWeaponComponent();
+	if (!WeaponComponent) return false;
+
+	return WeaponComponent->GetAmmunitionData(AmmunitionData);
+}
+
+USBWeaponComponent* USBPlayerHUDWidget::GetWeaponComponent() const
+{
+	const APawn* Player = GetOwningPlayerPawn();
+	if (!Player) return nullptr;
+
+	const auto WeaponComponent = Cast<USBWeaponComponent>(
+		Player->GetComponentByClass(USBWeaponComponent::StaticClass()));
+	if (!WeaponComponent) return nullptr;
+
+	return WeaponComponent;
 }

@@ -27,6 +27,8 @@ public:
 
 	FWeaponUIData GetUIData() const;
 
+	FAmmunitionData GetAmmunitionData() const;
+
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	USkeletalMeshComponent* WeaponMesh;

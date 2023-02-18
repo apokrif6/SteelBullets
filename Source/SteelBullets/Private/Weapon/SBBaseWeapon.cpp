@@ -50,6 +50,11 @@ FWeaponUIData ASBBaseWeapon::GetUIData() const
 	return UIData;
 }
 
+FAmmunitionData ASBBaseWeapon::GetAmmunitionData() const
+{
+	return CurrentAmmunition;
+}
+
 void ASBBaseWeapon::Shot()
 {
 }

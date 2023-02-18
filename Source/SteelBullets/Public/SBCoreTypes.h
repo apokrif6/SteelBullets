@@ -44,6 +44,9 @@ struct FWeaponUIData
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
 	UTexture2D* CrosshairIcon;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
+	UTexture2D* WeaponIcon;
 };
 #pragma endregion WeaponComponent
 

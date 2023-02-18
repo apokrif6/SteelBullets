@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "SBCoreTypes.h"
 #include "Blueprint/UserWidget.h"
+#include "Components/SBWeaponComponent.h"
 #include "SBPlayerHUDWidget.generated.h"
 
 UCLASS()
@@ -17,5 +18,11 @@ public:
 	float GetHealthPercent() const;
 
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
-	bool GetWeaponUIData(FWeaponUIData& WeaponUIData) const;
+	bool GetCurrentWeaponUIData(FWeaponUIData& WeaponUIData) const;
+
+	UFUNCTION(BlueprintCallable, Category = "Weapon")
+	bool GetCurrentWeaponAmmunitionData(FAmmunitionData& AmmunitionData) const;
+
+private:
+	USBWeaponComponent* GetWeaponComponent() const;
 };
