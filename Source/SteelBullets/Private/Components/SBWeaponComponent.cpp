@@ -224,6 +224,4 @@ void USBWeaponComponent::ChangeClip()
 	bReloadWeaponInProgress = true;
 
 	PlayAnimMontage(CurrentWeaponReloadAnimMontage);
-
-	CurrentWeapon->ChangeClip();
 }
