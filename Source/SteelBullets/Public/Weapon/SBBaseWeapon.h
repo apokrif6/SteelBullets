@@ -29,6 +29,8 @@ public:
 
 	FAmmunitionData GetAmmunitionData() const;
 
+	bool TryToAddAmmunition(int32 ClipsToAdd);
+
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	USkeletalMeshComponent* WeaponMesh;
@@ -63,6 +65,8 @@ protected:
 	bool IsAmmunitionEmpty() const;
 
 	bool IsClipEmpty() const;
+
+	bool IsAmmunitionFull() const;
 
 private:
 	FName MuzzleSocketName = "MuzzleSocket";

@@ -55,6 +55,37 @@ FAmmunitionData ASBBaseWeapon::GetAmmunitionData() const
 	return CurrentAmmunition;
 }
 
+bool ASBBaseWeapon::TryToAddAmmunition(int32 ClipsToAdd)
+{
+	if (CurrentAmmunition.Infinite || IsAmmunitionFull()) return false;
+
+	if (IsAmmunitionEmpty())
+	{
+		//limit adding clips to max clips amount
+		CurrentAmmunition.Clips = FMath::Clamp(ClipsToAdd, 0, DefaultAmmunition.Clips + 1);
+		OnClipEmpty.Broadcast(this);
+	}
+	else if (CurrentAmmunition.Clips < DefaultAmmunition.Clips)
+	{
+		const int32 NextClipsAmount = CurrentAmmunition.Clips + ClipsToAdd;
+		if (DefaultAmmunition.Clips - NextClipsAmount >= 0)
+		{
+			CurrentAmmunition.Clips = NextClipsAmount;
+		}
+		else
+		{
+			CurrentAmmunition.Clips = DefaultAmmunition.Clips;
+			CurrentAmmunition.Bullets = DefaultAmmunition.Bullets;
+		}
+	}
+	else
+	{
+		CurrentAmmunition.Bullets = DefaultAmmunition.Bullets;
+	}
+
+	return true;
+}
+
 void ASBBaseWeapon::Shot()
 {
 }
@@ -115,7 +146,7 @@ void ASBBaseWeapon::DecreaseAmmunition()
 	if (IsClipEmpty() && !IsAmmunitionEmpty())
 	{
 		StopFire();
-		OnClipEmpty.Broadcast();
+		OnClipEmpty.Broadcast(this);
 	}
 }
 
@@ -127,4 +158,9 @@ bool ASBBaseWeapon::IsAmmunitionEmpty() const
 bool ASBBaseWeapon::IsClipEmpty() const
 {
 	return CurrentAmmunition.Bullets == 0;
+}
+
+bool ASBBaseWeapon::IsAmmunitionFull() const
+{
+	return CurrentAmmunition.Clips == DefaultAmmunition.Clips && CurrentAmmunition.Bullets == DefaultAmmunition.Bullets;
 }

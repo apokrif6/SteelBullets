@@ -150,6 +150,19 @@ bool USBWeaponComponent::GetAmmunitionData(FAmmunitionData& AmmunitionData) cons
 	return true;
 }
 
+bool USBWeaponComponent::TryToAddAmmunition(TSubclassOf<ASBBaseWeapon> WeaponClass, int32 ClipsToAdd)
+{
+	for (const auto Weapon : Weapons)
+	{
+		if (Weapon && Weapon->IsA(WeaponClass))
+		{
+			return Weapon->TryToAddAmmunition(ClipsToAdd);
+		}
+	}
+
+	return false;
+}
+
 void USBWeaponComponent::PlayAnimMontage(UAnimMontage* AnimMontage) const
 {
 	ACharacter* Character = Cast<ACharacter>(GetOwner());
@@ -218,9 +231,24 @@ bool USBWeaponComponent::CanReload() const
 	return CurrentWeapon && !bEquipWeaponInProgress && !bReloadWeaponInProgress && CurrentWeapon->CanReload();
 }
 
-void USBWeaponComponent::OnEmptyClip()
+void USBWeaponComponent::OnEmptyClip(ASBBaseWeapon* EmptyWeapon)
 {
-	ChangeClip();
+	if (!EmptyWeapon) return;
+	
+	if (CurrentWeapon == EmptyWeapon)
+	{
+		ChangeClip();
+	}
+	else
+	{
+		for (const auto Weapon : Weapons)
+		{
+			if (Weapon == EmptyWeapon)
+			{
+				Weapon->ChangeClip();
+			}
+		}
+	}
 }
 
 void USBWeaponComponent::ChangeClip()

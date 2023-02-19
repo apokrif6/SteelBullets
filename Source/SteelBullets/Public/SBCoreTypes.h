@@ -5,7 +5,7 @@
 class ASBBaseWeapon;
 
 #pragma region WeaponComponent
-DECLARE_MULTICAST_DELEGATE(FOnClipEmpty);
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnClipEmpty, ASBBaseWeapon*);
 
 USTRUCT(BlueprintType)
 struct FWeaponData

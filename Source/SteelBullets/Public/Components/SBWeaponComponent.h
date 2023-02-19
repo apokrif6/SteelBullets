@@ -26,6 +26,8 @@ public:
 	bool GetWeaponUIData(FWeaponUIData& WeaponUIData) const;
 
 	bool GetAmmunitionData(FAmmunitionData& AmmunitionData) const;
+
+	bool TryToAddAmmunition(TSubclassOf<ASBBaseWeapon> WeaponClass, int32 ClipsToAdd);
 	
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
@@ -79,7 +81,7 @@ private:
 
 	bool CanReload() const;
 
-	void OnEmptyClip();
+	void OnEmptyClip(ASBBaseWeapon* EmptyWeapon);
 
 	void ChangeClip();
 };

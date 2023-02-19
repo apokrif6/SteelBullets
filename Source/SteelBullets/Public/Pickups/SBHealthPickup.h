@@ -6,7 +6,6 @@
 #include "Pickups/SBBasePickup.h"
 #include "SBHealthPickup.generated.h"
 
-
 UCLASS()
 class STEELBULLETS_API ASBHealthPickup : public ASBBasePickup
 {
