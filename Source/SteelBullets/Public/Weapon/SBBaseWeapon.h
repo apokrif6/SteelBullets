@@ -41,7 +41,7 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
 	FWeaponUIData UIData;
-	
+
 	virtual void BeginPlay() override;
 
 	virtual void Shot();
@@ -63,8 +63,6 @@ protected:
 	bool IsAmmunitionEmpty() const;
 
 	bool IsClipEmpty() const;
-
-	void LogAmmunition();
 
 private:
 	FName MuzzleSocketName = "MuzzleSocket";

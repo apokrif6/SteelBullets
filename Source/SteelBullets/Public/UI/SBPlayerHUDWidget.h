@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "SBCoreTypes.h"
 #include "Blueprint/UserWidget.h"
-#include "Components/SBWeaponComponent.h"
 #include "SBPlayerHUDWidget.generated.h"
 
 UCLASS()
@@ -22,7 +21,4 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
 	bool GetCurrentWeaponAmmunitionData(FAmmunitionData& AmmunitionData) const;
-
-private:
-	USBWeaponComponent* GetWeaponComponent() const;
 };

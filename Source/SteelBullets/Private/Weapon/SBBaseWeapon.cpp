@@ -109,10 +109,8 @@ void ASBBaseWeapon::IncreaseAmmunition()
 void ASBBaseWeapon::DecreaseAmmunition()
 {
 	if (CurrentAmmunition.Bullets == 0) return;
-	
-	CurrentAmmunition.Bullets--;
 
-	LogAmmunition();
+	CurrentAmmunition.Bullets--;
 
 	if (IsClipEmpty() && !IsAmmunitionEmpty())
 	{
@@ -129,11 +127,4 @@ bool ASBBaseWeapon::IsAmmunitionEmpty() const
 bool ASBBaseWeapon::IsClipEmpty() const
 {
 	return CurrentAmmunition.Bullets == 0;
-}
-
-void ASBBaseWeapon::LogAmmunition()
-{
-	FString AmmunitionInfo = "Ammo " + FString::FromInt(CurrentAmmunition.Bullets) + " / ";
-	AmmunitionInfo += CurrentAmmunition.Infinite ? "Infinite" : FString::FromInt(CurrentAmmunition.Clips);
-	GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, AmmunitionInfo);
 }

@@ -39,9 +39,7 @@ void ASBLauncherProjectile::OnProjectileHit(UPrimitiveComponent* HitComponent, A
                                             UPrimitiveComponent* OtherComp, FVector NormalImpulse,
                                             const FHitResult& Hit)
 {
-	GEngine->AddOnScreenDebugMessage(-3, 1.f, FColor::Blue, "Projectile hit");
-
-	UWorld* World = GetWorld();
+	const UWorld* World = GetWorld();
 	if (!World) return;
 
 	ProjectileMovementComponent->StopMovementImmediately();

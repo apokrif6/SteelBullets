@@ -72,5 +72,4 @@ void ASBRifleWeapon::MakeDamage(const FHitResult& HitResult)
 	if (!HitActor) return;
 
 	HitActor->TakeDamage(ShotDamage, FDamageEvent{}, GetPlayerController(), this);
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Orange, "Hit!");
 }
