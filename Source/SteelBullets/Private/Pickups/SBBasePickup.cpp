@@ -14,6 +14,9 @@ ASBBasePickup::ASBBasePickup()
 	CollisionComponent->SetSphereRadius(50.0f);
 	CollisionComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	CollisionComponent->SetCollisionResponseToAllChannels(ECR_Overlap);
+
+	RotatingMovementComponent = CreateDefaultSubobject<URotatingMovementComponent>("RotatingMovementComponent");
+
 	SetRootComponent(CollisionComponent);
 }
 
@@ -29,7 +32,7 @@ void ASBBasePickup::NotifyActorBeginOverlap(AActor* OtherActor)
 	const auto PlayerPawn = Cast<APawn>(OtherActor);
 
 	if (!IsPlayerAlive(PlayerPawn)) return;
-	
+
 	if (!GivePickupTo(PlayerPawn)) return;
 
 	OnPickupPicked();
