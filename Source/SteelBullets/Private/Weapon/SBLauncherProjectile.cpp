@@ -17,12 +17,16 @@ ASBLauncherProjectile::ASBLauncherProjectile()
 	SphereComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	SphereComponent->SetCollisionResponseToAllChannels(ECR_Block);
 
+	WeaponVFXComponent = CreateDefaultSubobject<USBWeaponVFXComponent>("WeaponVFXComponent");
+
 	SetRootComponent(SphereComponent);
 }
 
 void ASBLauncherProjectile::BeginPlay()
 {
 	Super::BeginPlay();
+
+	check(WeaponVFXComponent);
 
 	ProjectileMovementComponent->Velocity = LaunchDirection * ProjectileMovementComponent->InitialSpeed;
 	SphereComponent->OnComponentHit.AddDynamic(this, &ASBLauncherProjectile::OnProjectileHit);
@@ -48,6 +52,7 @@ void ASBLauncherProjectile::OnProjectileHit(UPrimitiveComponent* HitComponent, A
 	                                    UDamageType::StaticClass(), {}, this, nullptr, DoFullDamage);
 
 	DrawDebugSphere(World, GetActorLocation(), DamageRadius, 24, FColor::Red, false, 3.0f);
+	WeaponVFXComponent->PlayImpactFX(Hit);
 
 	Destroy();
 }

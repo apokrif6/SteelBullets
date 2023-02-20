@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Components/SBWeaponVFXComponent.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/Actor.h"
 #include "GameFramework/ProjectileMovementComponent.h"
@@ -22,6 +23,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = "Features")
 	UProjectileMovementComponent* ProjectileMovementComponent;
 
+	UPROPERTY(VisibleAnywhere, Category = "VFX")
+	USBWeaponVFXComponent* WeaponVFXComponent;
+	
 	UPROPERTY(VisibleAnywhere, Category = "Features")
 	USphereComponent* SphereComponent;
 

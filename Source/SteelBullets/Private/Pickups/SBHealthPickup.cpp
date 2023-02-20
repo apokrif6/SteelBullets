@@ -2,7 +2,6 @@
 
 
 #include "Pickups/SBHealthPickup.h"
-
 #include "SBUtils.h"
 #include "Components/SBHealthComponent.h"
 

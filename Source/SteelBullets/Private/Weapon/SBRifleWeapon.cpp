@@ -4,6 +4,17 @@
 #include "Weapon/SBRifleWeapon.h"
 #include "DrawDebugHelpers.h"
 
+ASBRifleWeapon::ASBRifleWeapon()
+{
+	WeaponVFXComponent = CreateDefaultSubobject<USBWeaponVFXComponent>("WeaponVFXComponent");
+}
+
+void ASBRifleWeapon::BeginPlay()
+{
+	Super::BeginPlay();
+
+	check(WeaponVFXComponent);
+}
 
 void ASBRifleWeapon::StartFire()
 {
@@ -39,9 +50,10 @@ void ASBRifleWeapon::Shot()
 	if (HitResult.bBlockingHit)
 	{
 		MakeDamage(HitResult);
-		DrawDebugLine(World, GetMuzzleWorldLocation(), HitResult.ImpactPoint,
+		WeaponVFXComponent->PlayImpactFX(HitResult);
+		/*DrawDebugLine(World, GetMuzzleWorldLocation(), HitResult.ImpactPoint,
 		              FColor::Orange, false, 1.0f, 0, 3.0f);
-		DrawDebugSphere(World, HitResult.ImpactPoint, 10.f, 24, FColor::Orange, false, 5.0f);
+		DrawDebugSphere(World, HitResult.ImpactPoint, 10.f, 24, FColor::Orange, false, 5.0f);*/
 	}
 	else
 	{
