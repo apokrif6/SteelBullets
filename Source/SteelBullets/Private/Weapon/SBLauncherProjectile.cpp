@@ -2,7 +2,6 @@
 
 
 #include "Weapon/SBLauncherProjectile.h"
-
 #include "DrawDebugHelpers.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -16,7 +15,8 @@ ASBLauncherProjectile::ASBLauncherProjectile()
 	SphereComponent->InitSphereRadius(SphereRadius);
 	SphereComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	SphereComponent->SetCollisionResponseToAllChannels(ECR_Block);
-
+	SphereComponent->bReturnMaterialOnMove = true;
+	
 	WeaponVFXComponent = CreateDefaultSubobject<USBWeaponVFXComponent>("WeaponVFXComponent");
 
 	SetRootComponent(SphereComponent);

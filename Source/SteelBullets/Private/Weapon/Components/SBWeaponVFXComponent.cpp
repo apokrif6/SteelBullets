@@ -1,7 +1,7 @@
 // Steel Bullets Game Demo
 
-#include "NiagaraFunctionLibrary.h"
 #include "Weapon/Components/SBWeaponVFXComponent.h"
+#include "NiagaraFunctionLibrary.h"
 
 USBWeaponVFXComponent::USBWeaponVFXComponent()
 {
@@ -10,5 +10,21 @@ USBWeaponVFXComponent::USBWeaponVFXComponent()
 
 void USBWeaponVFXComponent::PlayImpactFX(const FHitResult& Hit)
 {
-	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), Effect, Hit.ImpactPoint, Hit.ImpactNormal.Rotation());
+	UNiagaraSystem* EffectToSpawn = GetEffectToSpawn(Hit);
+
+	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), EffectToSpawn, Hit.ImpactPoint,
+	                                               Hit.ImpactNormal.Rotation());
+}
+
+UNiagaraSystem* USBWeaponVFXComponent::GetEffectToSpawn(const FHitResult& Hit)
+{
+	if (!Hit.PhysMaterial.IsValid()) return nullptr;
+
+	UNiagaraSystem* EffectToSpawn = DefaultEffect;
+
+	const auto PhysicalMaterial = Hit.PhysMaterial.Get();
+
+	if (EffectsMap.Contains(PhysicalMaterial)) return EffectsMap[PhysicalMaterial];;
+
+	return EffectToSpawn;
 }
