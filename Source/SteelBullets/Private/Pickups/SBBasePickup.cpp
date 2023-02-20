@@ -3,6 +3,9 @@
 
 #include "Pickups/SBBasePickup.h"
 
+#include "SBUtils.h"
+#include "Components/SBHealthComponent.h"
+
 ASBBasePickup::ASBBasePickup()
 {
 	PrimaryActorTick.bCanEverTick = false;
@@ -25,6 +28,8 @@ void ASBBasePickup::NotifyActorBeginOverlap(AActor* OtherActor)
 
 	const auto PlayerPawn = Cast<APawn>(OtherActor);
 
+	if (!IsPlayerAlive(PlayerPawn)) return;
+	
 	if (!GivePickupTo(PlayerPawn)) return;
 
 	OnPickupPicked();
@@ -33,6 +38,14 @@ void ASBBasePickup::NotifyActorBeginOverlap(AActor* OtherActor)
 bool ASBBasePickup::GivePickupTo(APawn* PlayerPawn)
 {
 	return false;
+}
+
+bool ASBBasePickup::IsPlayerAlive(APawn* PlayerPawn) const
+{
+	const auto HealthComponent = SBUtils::GetSBPlayerComponent<USBHealthComponent>(PlayerPawn);
+	if (!HealthComponent || HealthComponent->IsDead()) return false;
+
+	return true;
 }
 
 void ASBBasePickup::OnPickupPicked()

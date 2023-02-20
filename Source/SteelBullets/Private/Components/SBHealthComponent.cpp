@@ -67,11 +67,25 @@ bool USBHealthComponent::IsDead() const
 	return Health <= 0.0f;
 }
 
+bool USBHealthComponent::IsFullHealth() const
+{
+	return FMath::IsNearlyEqual(Health, MaxHealth);
+}
+
+bool USBHealthComponent::TryToHeal(float HPToHeal)
+{
+	if (IsDead() || IsFullHealth()) return false;
+
+	IncreaseHealth(HPToHeal);
+
+	return true;
+}
+
 void USBHealthComponent::AutoHeal()
 {
 	IncreaseHealth(HPToAutoHeal);
 
-	if (Health >= MaxHealth)
+	if (IsFullHealth())
 	{
 		GetWorld()->GetTimerManager().ClearTimer(AutoHealTimer);
 	}

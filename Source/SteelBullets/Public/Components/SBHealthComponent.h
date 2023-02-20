@@ -19,9 +19,13 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Health")
 	float GetHealthPercent() const;
-	
+
 	UFUNCTION(BlueprintCallable, Category = "Health")
 	bool IsDead() const;
+
+	bool IsFullHealth() const;
+
+	bool TryToHeal(float HPToHeal);
 
 	FOnHealthChanged OnHealthChanged;
 
@@ -34,13 +38,16 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Health")
 	bool CanAutoHeal = true;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Health", Meta = (ClampMin = "0.0", ClampMax = "10.0", EditCondition = "CanAutoHeal"))
+	UPROPERTY(EditDefaultsOnly, Category = "Health",
+		Meta = (ClampMin = "0.0", ClampMax = "10.0", EditCondition = "CanAutoHeal"))
 	float AutoHealDelay = 3.0f;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Health", Meta = (ClampMin = "0.1", ClampMax = "10.0", EditCondition = "CanAutoHeal"))
+	UPROPERTY(EditDefaultsOnly, Category = "Health",
+		Meta = (ClampMin = "0.1", ClampMax = "10.0", EditCondition = "CanAutoHeal"))
 	float AutoHealFrequency = 0.5f;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Health", Meta = (ClampMin = "1.0", ClampMax = "10.0", EditCondition = "CanAutoHeal"))
+	UPROPERTY(EditDefaultsOnly, Category = "Health",
+		Meta = (ClampMin = "1.0", ClampMax = "10.0", EditCondition = "CanAutoHeal"))
 	float HPToAutoHeal = 1.0f;
 
 	UFUNCTION()

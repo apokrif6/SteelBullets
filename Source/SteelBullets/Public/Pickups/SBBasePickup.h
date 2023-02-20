@@ -21,13 +21,15 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Pickup")
 	float RespawnTime = 5.0f;
-	
+
 	virtual void BeginPlay() override;
 
 	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
 
-private:
 	virtual bool GivePickupTo(APawn* PlayerPawn);
+
+private:
+	bool IsPlayerAlive(APawn* PlayerPawn) const;
 	
 	void OnPickupPicked();
 
