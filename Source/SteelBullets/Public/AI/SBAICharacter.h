@@ -15,6 +15,9 @@ class STEELBULLETS_API ASBAICharacter : public ASBBaseCharacter
 public:
 	ASBAICharacter(const FObjectInitializer& ObjectInitializer);
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AI")
 	UBehaviorTree* BehaviorTree;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AIMovement")
+	float RotationRate = 200.0f;
 };
