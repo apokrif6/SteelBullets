@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "BehaviorTree/BehaviorTree.h"
 #include "Player/SBBaseCharacter.h"
 #include "SBAICharacter.generated.h"
 
@@ -13,4 +14,7 @@ class STEELBULLETS_API ASBAICharacter : public ASBBaseCharacter
 
 public:
 	ASBAICharacter(const FObjectInitializer& ObjectInitializer);
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
+	UBehaviorTree* BehaviorTree;
 };

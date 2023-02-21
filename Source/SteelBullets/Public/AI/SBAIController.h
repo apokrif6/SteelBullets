@@ -10,5 +10,7 @@ UCLASS()
 class STEELBULLETS_API ASBAIController : public AAIController
 {
 	GENERATED_BODY()
-	
+
+protected:
+	virtual void OnPossess(APawn* InPawn) override;
 };
