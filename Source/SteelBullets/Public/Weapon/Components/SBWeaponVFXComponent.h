@@ -3,28 +3,27 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "SBCoreTypes.h"
 #include "Components/ActorComponent.h"
 #include "SBWeaponVFXComponent.generated.h"
 
-class UNiagaraSystem;
-
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class STEELBULLETS_API USBWeaponVFXComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
 public:
 	USBWeaponVFXComponent();
-	
+
 	void PlayImpactFX(const FHitResult& Hit);
 
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
-	UNiagaraSystem* DefaultEffect;
+	FImpactData DefaultImpactData;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
-	TMap<UPhysicalMaterial*, UNiagaraSystem*> EffectsMap;
+	TMap<UPhysicalMaterial*, FImpactData> ImpactDataMap;
 
 private:
-	UNiagaraSystem* GetEffectToSpawn(const FHitResult& Hit);
+	FImpactData GetImpactData(const FHitResult& Hit);
 };

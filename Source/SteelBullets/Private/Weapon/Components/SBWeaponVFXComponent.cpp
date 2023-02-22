@@ -2,6 +2,8 @@
 
 #include "Weapon/Components/SBWeaponVFXComponent.h"
 #include "NiagaraFunctionLibrary.h"
+#include "Components/DecalComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 USBWeaponVFXComponent::USBWeaponVFXComponent()
 {
@@ -10,21 +12,28 @@ USBWeaponVFXComponent::USBWeaponVFXComponent()
 
 void USBWeaponVFXComponent::PlayImpactFX(const FHitResult& Hit)
 {
-	UNiagaraSystem* EffectToSpawn = GetEffectToSpawn(Hit);
+	const FImpactData ImpactData = GetImpactData(Hit);
 
-	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), EffectToSpawn, Hit.ImpactPoint,
+	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), ImpactData.NiagaraEffect, Hit.ImpactPoint,
 	                                               Hit.ImpactNormal.Rotation());
+
+	UDecalComponent* SpawnedDecal = UGameplayStatics::SpawnDecalAtLocation(
+		GetWorld(), ImpactData.DecalData.Material, ImpactData.DecalData.Size,
+		Hit.ImpactPoint, Hit.ImpactNormal.Rotation());
+	if (!SpawnedDecal) return;
+
+	SpawnedDecal->SetFadeOut(ImpactData.DecalData.LifeTime, ImpactData.DecalData.FadeOutTime);
 }
 
-UNiagaraSystem* USBWeaponVFXComponent::GetEffectToSpawn(const FHitResult& Hit)
+FImpactData USBWeaponVFXComponent::GetImpactData(const FHitResult& Hit)
 {
-	if (!Hit.PhysMaterial.IsValid()) return nullptr;
+	if (!Hit.PhysMaterial.IsValid()) return DefaultImpactData;
 
-	UNiagaraSystem* EffectToSpawn = DefaultEffect;
+	const FImpactData ImpactData = DefaultImpactData;
 
 	const auto PhysicalMaterial = Hit.PhysMaterial.Get();
 
-	if (EffectsMap.Contains(PhysicalMaterial)) return EffectsMap[PhysicalMaterial];;
+	if (ImpactDataMap.Contains(PhysicalMaterial)) return ImpactDataMap[PhysicalMaterial];;
 
-	return EffectToSpawn;
+	return ImpactData;
 }
