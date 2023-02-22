@@ -13,9 +13,9 @@ USBNextLocationTask::USBNextLocationTask()
 
 EBTNodeResult::Type USBNextLocationTask::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
-	const AAIController* Controller = OwnerComp.GetAIOwner();
-	const auto BlackBoard = OwnerComp.GetBlackboardComponent();
-	if (!Controller || !BlackBoard) return EBTNodeResult::Failed;
+	const auto Controller = OwnerComp.GetAIOwner();
+	const auto Blackboard = OwnerComp.GetBlackboardComponent();
+	if (!Controller || !Blackboard) return EBTNodeResult::Failed;
 
 	const auto Pawn = Controller->GetPawn();
 	if (!Pawn) return EBTNodeResult::Failed;
@@ -27,7 +27,7 @@ EBTNodeResult::Type USBNextLocationTask::ExecuteTask(UBehaviorTreeComponent& Own
 	const bool IsPointFound = NavigationSystem->GetRandomReachablePointInRadius(Pawn->GetActorLocation(), Radius, NavigationLocation);
 	if (!IsPointFound) return EBTNodeResult::Failed;
 
-	BlackBoard->SetValueAsVector(LocationKey.SelectedKeyName, NavigationLocation);
+	Blackboard->SetValueAsVector(LocationKey.SelectedKeyName, NavigationLocation);
 
 	return EBTNodeResult::Succeeded;
 }

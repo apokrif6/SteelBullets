@@ -3,6 +3,7 @@
 
 #include "AI/SBAIController.h"
 #include "AI/SBAICharacter.h"
+#include "BehaviorTree/BlackboardComponent.h"
 
 ASBAIController::ASBAIController()
 {
@@ -24,7 +25,16 @@ void ASBAIController::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 
-	const auto AimActor = SBAIPerceptionComponent->GetClosestEnemy();
+	const auto AimActor = GetFocusOnActor();
 
 	SetFocus(AimActor);
+}
+
+AActor* ASBAIController::GetFocusOnActor() const
+{
+	const auto BlackboardComponent = GetBlackboardComponent();
+	
+	if (!BlackboardComponent) return nullptr;
+
+	return Cast<AActor>(BlackboardComponent->GetValueAsObject(FocusOnKeyName));
 }
