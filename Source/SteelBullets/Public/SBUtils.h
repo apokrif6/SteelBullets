@@ -4,7 +4,7 @@ class SBUtils
 {
 public:
 	template <typename T>
-	static T* GetSBPlayerComponent(APawn* PlayerPawn)
+	static T* GetSBPlayerComponent(AActor* PlayerPawn)
 	{
 		if (!PlayerPawn) return nullptr;
 

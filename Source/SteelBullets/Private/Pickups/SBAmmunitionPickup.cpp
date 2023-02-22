@@ -2,7 +2,6 @@
 
 
 #include "Pickups/SBAmmunitionPickup.h"
-
 #include "SBUtils.h"
 #include "Components/SBWeaponComponent.h"
 
