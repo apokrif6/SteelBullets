@@ -109,14 +109,18 @@ void ASBBaseCharacter::OnHealthChanged(float Health)
 void ASBBaseCharacter::OnDeath()
 {
 	WeaponComponent->StopFire();
-	
-	PlayAnimMontage(DeathAnimMontage);
 
 	GetCharacterMovement()->DisableMovement();
 
 	SetLifeSpan(5.0f);
 
 	GetCapsuleComponent()->SetCollisionResponseToAllChannels(ECR_Ignore);
+
+	const auto CharacterMesh = GetMesh();
+	if (!CharacterMesh) return;
+
+	CharacterMesh->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
+	CharacterMesh->SetSimulatePhysics(true);
 }
 
 void ASBBaseCharacter::OnGroundLanded(const FHitResult& HitResult)

@@ -39,9 +39,6 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	USBWeaponComponent* WeaponComponent;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Animations")
-	UAnimMontage* DeathAnimMontage;
-
 	UPROPERTY(EditDefaultsOnly, Category = "Damage")
 	FVector2D FallingDamageVelocity = FVector2D(900.0f, 1200.0f);
 
