@@ -4,6 +4,7 @@
 #include "Weapon/SBBaseWeapon.h"
 #include "DrawDebugHelpers.h"
 #include "GameFramework/Character.h"
+#include "Player/SBBaseCharacter.h"
 
 ASBBaseWeapon::ASBBaseWeapon()
 {
@@ -100,10 +101,21 @@ APlayerController* ASBBaseWeapon::GetPlayerController() const
 
 bool ASBBaseWeapon::GetPlayerViewPoint(FVector& ViewLocation, FRotator& ViewRotation) const
 {
-	const APlayerController* PlayerController = GetPlayerController();
-	if (!PlayerController) return false;
+	const auto SBCharacter = Cast<ACharacter>(GetOwner());
+	if (!SBCharacter) return false;
 
-	PlayerController->GetPlayerViewPoint(ViewLocation, ViewRotation);
+	if (SBCharacter->IsPlayerControlled())
+	{
+		const APlayerController* PlayerController = GetPlayerController();
+		if (!PlayerController) return false;
+
+		PlayerController->GetPlayerViewPoint(ViewLocation, ViewRotation);
+	}
+	else
+	{
+		ViewLocation = GetMuzzleWorldLocation();
+		ViewRotation = WeaponMesh->GetSocketRotation(MuzzleSocketName);
+	}
 
 	return true;
 }
