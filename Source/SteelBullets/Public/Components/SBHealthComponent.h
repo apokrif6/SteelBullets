@@ -50,6 +50,9 @@ protected:
 		Meta = (ClampMin = "1.0", ClampMax = "10.0", EditCondition = "CanAutoHeal"))
 	float HPToAutoHeal = 1.0f;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
+	TSubclassOf<UCameraShakeBase> CameraShake;
+	
 	UFUNCTION()
 	void OnTakeAnyDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType,
 	                     AController* InstigatedBy, AActor* DamageCauser);
@@ -66,4 +69,6 @@ private:
 	void IncreaseHealth(float HealthToIncrease);
 
 	void DecreaseHealth(float HealthToDecrease);
+
+	void PlayCameraShake() const;
 };

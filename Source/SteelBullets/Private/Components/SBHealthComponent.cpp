@@ -3,6 +3,8 @@
 
 #include "Components/SBHealthComponent.h"
 
+#include "Player/SBBaseCharacter.h"
+
 USBHealthComponent::USBHealthComponent()
 {
 	PrimaryComponentTick.bCanEverTick = false;
@@ -38,6 +40,8 @@ void USBHealthComponent::OnTakeAnyDamage(AActor* DamagedActor, float Damage, con
 		GetWorld()->GetTimerManager().SetTimer(AutoHealTimer, this, &USBHealthComponent::AutoHeal,
 		                                       AutoHealFrequency, true, AutoHealDelay);
 	}
+	
+	PlayCameraShake();
 }
 
 void USBHealthComponent::IncreaseHealth(const float HealthToIncrease)
@@ -50,6 +54,22 @@ void USBHealthComponent::DecreaseHealth(const float HealthToDecrease)
 {
 	Health = FMath::Clamp(Health - HealthToDecrease, 0.0f, MaxHealth);
 	OnHealthChanged.Broadcast(Health);
+}
+
+void USBHealthComponent::PlayCameraShake() const
+{
+	if (IsDead()) return;
+
+	const auto Player = Cast<APawn>(GetOwner());
+	if (!Player) return;
+
+	const auto PlayerController = Player->GetController<APlayerController>();
+	if (!PlayerController) return;
+
+	const auto PlayerCameraManager = PlayerController->PlayerCameraManager;
+	if (!PlayerCameraManager) return;
+
+	PlayerCameraManager->StartCameraShake(CameraShake);
 }
 
 float USBHealthComponent::GetHealth() const
