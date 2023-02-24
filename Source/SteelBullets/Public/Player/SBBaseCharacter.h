@@ -54,6 +54,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	float GetMovementDirection() const;
 
+	virtual void OnDeath();
+
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
@@ -68,8 +70,6 @@ private:
 	void StopSprint();
 
 	void OnHealthChanged(float Health);
-
-	void OnDeath();
 
 	UFUNCTION()
 	void OnGroundLanded(const FHitResult& HitResult);

@@ -20,4 +20,7 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AIMovement")
 	float RotationRate = 200.0f;
+
+private:
+	virtual void OnDeath() override;
 };

@@ -17,3 +17,14 @@ ASBAICharacter::ASBAICharacter(const FObjectInitializer& ObjectInitializer) : Su
 	CharacterMovementComponent->RotationRate = FRotator(0.0f, RotationRate, 0.0f);
 	CharacterMovementComponent->bUseControllerDesiredRotation = true;
 }
+
+void ASBAICharacter::OnDeath()
+{
+	Super::OnDeath();
+
+	const auto SBController = Cast<AAIController>(Controller);
+	const auto ControllerBrainComponent = SBController->BrainComponent;
+	if (!SBController || !ControllerBrainComponent) return;
+
+	ControllerBrainComponent->Cleanup();
+}
