@@ -47,7 +47,7 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "AI")
 	bool bIsMainCharacter = false;
-	
+
 	virtual void BeginPlay() override;
 
 public:
@@ -59,7 +59,7 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	bool IsMainCharacter() const;
-	
+
 	virtual void OnDeath();
 
 	virtual void Tick(float DeltaTime) override;
@@ -75,6 +75,8 @@ private:
 
 	void StopSprint();
 
+	void StartFire();
+	
 	void OnHealthChanged(float Health);
 
 	UFUNCTION()

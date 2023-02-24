@@ -55,7 +55,7 @@ void ASBBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ASBBaseCharacter::Jump);
 	PlayerInputComponent->BindAction("Sprint", IE_Pressed, this, &ASBBaseCharacter::StartSprint);
 	PlayerInputComponent->BindAction("Sprint", IE_Released, this, &ASBBaseCharacter::StopSprint);
-	PlayerInputComponent->BindAction("Fire", IE_Pressed, WeaponComponent, &USBWeaponComponent::StartFire);
+	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &ASBBaseCharacter::StartFire);
 	PlayerInputComponent->BindAction("Fire", IE_Released, WeaponComponent, &USBWeaponComponent::StopFire);
 	PlayerInputComponent->BindAction("ChangeWeapon", IE_Pressed, WeaponComponent, &USBWeaponComponent::NextWeapon);
 	PlayerInputComponent->BindAction("Reload", IE_Pressed, WeaponComponent, &USBWeaponComponent::Reload);
@@ -83,6 +83,13 @@ void ASBBaseCharacter::StartSprint()
 void ASBBaseCharacter::StopSprint()
 {
 	bShouldSprint = false;
+}
+
+void ASBBaseCharacter::StartFire()
+{
+	StopSprint();
+
+	WeaponComponent->StartFire();
 }
 
 bool ASBBaseCharacter::IsSprinting() const
