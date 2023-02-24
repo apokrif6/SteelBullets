@@ -101,6 +101,11 @@ float ASBBaseCharacter::GetMovementDirection() const
 	return FMath::RadiansToDegrees(DotProduct) * FMath::Sign(CrossProduct.Z);
 }
 
+bool ASBBaseCharacter::IsMainCharacter() const
+{
+	return bIsMainCharacter;
+}
+
 void ASBBaseCharacter::OnHealthChanged(float Health)
 {
 	HealthTextRenderComponent->SetText(FText::FromString(FString::Printf(TEXT("%.0f"), Health)));

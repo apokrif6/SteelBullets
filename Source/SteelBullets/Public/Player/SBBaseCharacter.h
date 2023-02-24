@@ -45,6 +45,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Damage")
 	FVector2D FallingDamage = FVector2D(10.0f, 50.0f);
 
+	UPROPERTY(EditDefaultsOnly, Category = "AI")
+	bool bIsMainCharacter = false;
+	
 	virtual void BeginPlay() override;
 
 public:
@@ -54,6 +57,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	float GetMovementDirection() const;
 
+	UFUNCTION(BlueprintCallable)
+	bool IsMainCharacter() const;
+	
 	virtual void OnDeath();
 
 	virtual void Tick(float DeltaTime) override;

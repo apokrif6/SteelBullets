@@ -6,8 +6,9 @@
 #include "SBUtils.h"
 #include "Components/SBHealthComponent.h"
 #include "Perception/AISense_Sight.h"
+#include "Player/SBBaseCharacter.h"
 
-AActor* USBAIPerceptionComponent::GetClosestEnemy() const
+AActor* USBAIPerceptionComponent::GetMainCharacter() const
 {
 	TArray<AActor*> PerceivedActors;
 	GetCurrentlyPerceivedActors(UAISense_Sight::StaticClass(), PerceivedActors);
@@ -19,23 +20,18 @@ AActor* USBAIPerceptionComponent::GetClosestEnemy() const
 	const auto Pawn = Controller->GetPawn();
 	if (!Pawn) return nullptr;
 
-	float NearestDistance = MAX_FLT;
-	AActor* NearestActor = nullptr;
-
 	for (const auto PerceivedActor : PerceivedActors)
 	{
 		const auto HealthComponent = SBUtils::GetSBPlayerComponent<USBHealthComponent>(PerceivedActor);
 		
 		if (!HealthComponent || HealthComponent->IsDead()) return nullptr;
 
-		const float CurrentDistance = (PerceivedActor->GetActorLocation() - Pawn->GetActorLocation()).Size();
-
-		if (CurrentDistance < NearestDistance)
+		const auto MainCharacter = Cast<ASBBaseCharacter>(PerceivedActor);
+		if (MainCharacter->IsMainCharacter())
 		{
-			NearestDistance = CurrentDistance;
-			NearestActor = PerceivedActor;
+			return MainCharacter;
 		}
 	}
 
-	return NearestActor;
+	return nullptr;
 }

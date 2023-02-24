@@ -23,7 +23,7 @@ void USBFindEnemyService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 
 		if (PerceptionComponent)
 		{
-			Blackboard->SetValueAsObject(EnemyActorKey.SelectedKeyName, PerceptionComponent->GetClosestEnemy());
+			Blackboard->SetValueAsObject(EnemyActorKey.SelectedKeyName, PerceptionComponent->GetMainCharacter());
 		}
 	}
 

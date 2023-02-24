@@ -12,5 +12,5 @@ class STEELBULLETS_API USBAIPerceptionComponent : public UAIPerceptionComponent
 	GENERATED_BODY()
 
 public:
-	AActor* GetClosestEnemy() const;
+	AActor* GetMainCharacter() const;
 };
