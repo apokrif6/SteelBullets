@@ -179,7 +179,7 @@ bool ASBBaseWeapon::IsAmmunitionFull() const
 	return CurrentAmmunition.Clips == DefaultAmmunition.Clips && CurrentAmmunition.Bullets == DefaultAmmunition.Bullets;
 }
 
-UNiagaraComponent* ASBBaseWeapon::SpawnMuzzleFX()
+UNiagaraComponent* ASBBaseWeapon::SpawnMuzzleFX() const
 {
 	return UNiagaraFunctionLibrary::SpawnSystemAttached(MuzzleFX, WeaponMesh, MuzzleSocketName, FVector::ZeroVector,
 	                                                    FRotator::ZeroRotator, EAttachLocation::SnapToTarget, true);

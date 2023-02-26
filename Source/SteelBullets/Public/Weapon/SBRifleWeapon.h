@@ -8,6 +8,9 @@
 #include "NiagaraComponent.h"
 #include "SBRifleWeapon.generated.h"
 
+class UNiagaraSystem;
+class UNiagaraComponent;
+
 UCLASS()
 class STEELBULLETS_API ASBRifleWeapon : public ASBBaseWeapon
 {
@@ -33,6 +36,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = "VFX")
 	USBWeaponVFXComponent* WeaponVFXComponent;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
+	UNiagaraSystem* TraceFX;
+
 	virtual void Shot() override;
 
 	virtual void BeginPlay() override;
@@ -50,4 +56,8 @@ private:
 	void InitMuzzleFX();
 
 	void SetMuzzleFXVisibility(bool IsVisible);
+
+	FString TraceTargetVariableName = "TraceTarget";
+
+	void SpawnTraceFX(const FVector& TraceStart, const FVector& TraceEnd);
 };

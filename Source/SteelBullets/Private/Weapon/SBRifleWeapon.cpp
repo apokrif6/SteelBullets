@@ -3,6 +3,7 @@
 
 #include "Weapon/SBRifleWeapon.h"
 #include "DrawDebugHelpers.h"
+#include "NiagaraFunctionLibrary.h"
 
 class UNiagaraComponent;
 
@@ -53,16 +54,16 @@ void ASBRifleWeapon::Shot()
 	FHitResult HitResult;
 	MakeHit(HitResult, TraceStart, TraceEnd);
 
+	FVector TraceFXEnd = TraceEnd;
+
 	if (HitResult.bBlockingHit)
 	{
+		TraceFXEnd = HitResult.ImpactPoint;
 		MakeDamage(HitResult);
 		WeaponVFXComponent->PlayImpactFX(HitResult);
 	}
-	else
-	{
-		DrawDebugLine(World, GetMuzzleWorldLocation(), TraceEnd,
-		              FColor::Orange, false, 1.0f, 0);
-	}
+
+	SpawnTraceFX(GetMuzzleWorldLocation(), TraceFXEnd);
 
 	DecreaseAmmunition();
 }
@@ -106,4 +107,12 @@ void ASBRifleWeapon::SetMuzzleFXVisibility(bool IsVisible)
 		MuzzleFXComponent->SetPaused(!IsVisible);
 		MuzzleFXComponent->SetVisibility(IsVisible, true);
 	}
+}
+
+void ASBRifleWeapon::SpawnTraceFX(const FVector& TraceStart, const FVector& TraceEnd)
+{
+	const auto TraceFXComponent = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), TraceFX, TraceStart);
+	if (!TraceFXComponent) return;
+
+	TraceFXComponent->SetNiagaraVariableVec3(TraceTargetVariableName, TraceEnd);
 }

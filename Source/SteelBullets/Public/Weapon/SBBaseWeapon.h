@@ -72,7 +72,7 @@ protected:
 
 	bool IsAmmunitionFull() const;
 
-	UNiagaraComponent* SpawnMuzzleFX();
+	UNiagaraComponent* SpawnMuzzleFX() const;
 
 private:
 	FName MuzzleSocketName = "MuzzleSocket";
