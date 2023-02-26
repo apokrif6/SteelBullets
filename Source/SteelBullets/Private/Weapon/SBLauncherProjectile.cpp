@@ -16,7 +16,7 @@ ASBLauncherProjectile::ASBLauncherProjectile()
 	SphereComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	SphereComponent->SetCollisionResponseToAllChannels(ECR_Block);
 	SphereComponent->bReturnMaterialOnMove = true;
-	
+
 	WeaponVFXComponent = CreateDefaultSubobject<USBWeaponVFXComponent>("WeaponVFXComponent");
 
 	SetRootComponent(SphereComponent);
@@ -51,7 +51,6 @@ void ASBLauncherProjectile::OnProjectileHit(UPrimitiveComponent* HitComponent, A
 	UGameplayStatics::ApplyRadialDamage(World, Damage, GetActorLocation(), DamageRadius,
 	                                    UDamageType::StaticClass(), {}, this, nullptr, DoFullDamage);
 
-	DrawDebugSphere(World, GetActorLocation(), DamageRadius, 24, FColor::Red, false, 3.0f);
 	WeaponVFXComponent->PlayImpactFX(Hit);
 
 	Destroy();
