@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Components/SBWeaponVFXComponent.h"
 #include "Weapon/SBBaseWeapon.h"
+#include "NiagaraComponent.h"
 #include "SBRifleWeapon.generated.h"
 
 UCLASS()
@@ -42,4 +43,11 @@ private:
 	virtual bool GetTraceData(FVector& TraceStart, FVector& TraceEnd) const override;
 
 	void MakeDamage(const FHitResult& HitResult);
+
+	UPROPERTY()
+	UNiagaraComponent* MuzzleFXComponent;
+
+	void InitMuzzleFX();
+
+	void SetMuzzleFXVisibility(bool IsVisible);
 };

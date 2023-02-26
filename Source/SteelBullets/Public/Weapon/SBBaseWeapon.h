@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "NiagaraComponentPool.h"
 #include "SBCoreTypes.h"
 #include "GameFramework/Actor.h"
 #include "SBBaseWeapon.generated.h"
@@ -44,6 +45,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
 	FWeaponUIData UIData;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
+	UNiagaraSystem* MuzzleFX;
+	
 	virtual void BeginPlay() override;
 
 	virtual void Shot();
@@ -67,6 +71,8 @@ protected:
 	bool IsClipEmpty() const;
 
 	bool IsAmmunitionFull() const;
+
+	UNiagaraComponent* SpawnMuzzleFX();
 
 private:
 	FName MuzzleSocketName = "MuzzleSocket";

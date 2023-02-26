@@ -3,6 +3,7 @@
 
 #include "Weapon/SBBaseWeapon.h"
 #include "DrawDebugHelpers.h"
+#include "NiagaraFunctionLibrary.h"
 #include "GameFramework/Character.h"
 #include "Player/SBBaseCharacter.h"
 
@@ -176,4 +177,10 @@ bool ASBBaseWeapon::IsClipEmpty() const
 bool ASBBaseWeapon::IsAmmunitionFull() const
 {
 	return CurrentAmmunition.Clips == DefaultAmmunition.Clips && CurrentAmmunition.Bullets == DefaultAmmunition.Bullets;
+}
+
+UNiagaraComponent* ASBBaseWeapon::SpawnMuzzleFX()
+{
+	return UNiagaraFunctionLibrary::SpawnSystemAttached(MuzzleFX, WeaponMesh, MuzzleSocketName, FVector::ZeroVector,
+	                                                    FRotator::ZeroRotator, EAttachLocation::SnapToTarget, true);
 }

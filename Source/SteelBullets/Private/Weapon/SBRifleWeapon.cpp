@@ -4,6 +4,8 @@
 #include "Weapon/SBRifleWeapon.h"
 #include "DrawDebugHelpers.h"
 
+class UNiagaraComponent;
+
 ASBRifleWeapon::ASBRifleWeapon()
 {
 	WeaponVFXComponent = CreateDefaultSubobject<USBWeaponVFXComponent>("WeaponVFXComponent");
@@ -18,6 +20,8 @@ void ASBRifleWeapon::BeginPlay()
 
 void ASBRifleWeapon::StartFire()
 {
+	InitMuzzleFX();
+
 	GetWorldTimerManager().SetTimer(ShotTimerHandle, this, &ASBRifleWeapon::Shot, DelayBetweenShots, true);
 
 	Shot();
@@ -25,6 +29,8 @@ void ASBRifleWeapon::StartFire()
 
 void ASBRifleWeapon::StopFire()
 {
+	SetMuzzleFXVisibility(false);
+
 	GetWorldTimerManager().ClearTimer(ShotTimerHandle);
 }
 
@@ -51,9 +57,6 @@ void ASBRifleWeapon::Shot()
 	{
 		MakeDamage(HitResult);
 		WeaponVFXComponent->PlayImpactFX(HitResult);
-		/*DrawDebugLine(World, GetMuzzleWorldLocation(), HitResult.ImpactPoint,
-		              FColor::Orange, false, 1.0f, 0, 3.0f);
-		DrawDebugSphere(World, HitResult.ImpactPoint, 10.f, 24, FColor::Orange, false, 5.0f);*/
 	}
 	else
 	{
@@ -84,4 +87,23 @@ void ASBRifleWeapon::MakeDamage(const FHitResult& HitResult)
 	if (!HitActor) return;
 
 	HitActor->TakeDamage(ShotDamage, FDamageEvent{}, GetPlayerController(), this);
+}
+
+void ASBRifleWeapon::InitMuzzleFX()
+{
+	if (!MuzzleFXComponent)
+	{
+		MuzzleFXComponent = SpawnMuzzleFX();
+	}
+
+	SetMuzzleFXVisibility(true);
+}
+
+void ASBRifleWeapon::SetMuzzleFXVisibility(bool IsVisible)
+{
+	if (MuzzleFXComponent)
+	{
+		MuzzleFXComponent->SetPaused(!IsVisible);
+		MuzzleFXComponent->SetVisibility(IsVisible, true);
+	}
 }

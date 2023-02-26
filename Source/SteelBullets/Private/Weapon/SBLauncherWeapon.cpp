@@ -37,4 +37,5 @@ void ASBLauncherWeapon::Shot()
 	Projectile->FinishSpawning(SpawnTransform);
 
 	DecreaseAmmunition();
+	SpawnMuzzleFX();
 }
