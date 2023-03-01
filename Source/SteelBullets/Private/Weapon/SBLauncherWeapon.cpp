@@ -16,7 +16,13 @@ void ASBLauncherWeapon::StopFire()
 void ASBLauncherWeapon::Shot()
 {
 	UWorld* World = GetWorld();
-	if (!World || IsAmmunitionEmpty()) return;
+	if (!World) return;
+
+	if (IsAmmunitionEmpty())
+	{
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), NoAmmoSound, GetActorLocation());
+		return;
+	}
 
 	FVector TraceStart, TraceEnd;
 	if (!GetTraceData(TraceStart, TraceEnd)) return;
@@ -38,4 +44,5 @@ void ASBLauncherWeapon::Shot()
 
 	DecreaseAmmunition();
 	SpawnMuzzleFX();
+	UGameplayStatics::SpawnSoundAttached(FireSound, WeaponMesh, MuzzleSocketName);
 }

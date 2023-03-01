@@ -6,6 +6,7 @@
 #include "NiagaraComponentPool.h"
 #include "SBCoreTypes.h"
 #include "GameFramework/Actor.h"
+#include "Sound/SoundCue.h"
 #include "SBBaseWeapon.generated.h"
 
 UCLASS()
@@ -47,6 +48,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
 	UNiagaraSystem* MuzzleFX;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Sounds")
+	USoundCue* FireSound;
 	
 	virtual void BeginPlay() override;
 
@@ -74,8 +78,7 @@ protected:
 
 	UNiagaraComponent* SpawnMuzzleFX() const;
 
-private:
 	FName MuzzleSocketName = "MuzzleSocket";
-
+private:
 	FAmmunitionData CurrentAmmunition;
 };

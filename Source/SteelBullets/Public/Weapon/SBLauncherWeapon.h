@@ -18,8 +18,11 @@ public:
 	virtual void StopFire() override;
 
 protected:
-	UPROPERTY(EditDefaultsOnly, Category = "Projectile")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Projectile")
 	TSubclassOf<ASBLauncherProjectile> ProjectileClass;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Sounds")
+	USoundCue* NoAmmoSound;
 	
 	virtual void Shot() override;
 };

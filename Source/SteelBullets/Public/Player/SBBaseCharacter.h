@@ -9,6 +9,7 @@
 #include "Components/TextRenderComponent.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Sound/SoundCue.h"
 #include "SBBaseCharacter.generated.h"
 
 UCLASS()
@@ -48,6 +49,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "AI")
 	bool bIsMainCharacter = false;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Sounds")
+	USoundCue* DeathSound;
+	
 	virtual void BeginPlay() override;
 
 public:

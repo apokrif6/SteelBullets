@@ -53,9 +53,12 @@ private:
 	UPROPERTY()
 	UNiagaraComponent* MuzzleFXComponent;
 
-	void InitMuzzleFX();
+	UPROPERTY()
+	UAudioComponent* FireAudioComponent;
 
-	void SetMuzzleFXVisibility(bool IsVisible);
+	void InitEffectComponents();
+
+	void SetEffectComponentsStatus(bool IsActive);
 
 	FString TraceTargetVariableName = "TraceTarget";
 
