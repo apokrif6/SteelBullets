@@ -32,7 +32,7 @@ public:
 	FOnDeath OnDeath;
 
 protected:
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Health", Meta = (ClampMin = "50.0", ClampMax = "200.0"))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Health", Meta = (ClampMin = "50.0", ClampMax = "500.0"))
 	float MaxHealth = 100.0f;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Health")
