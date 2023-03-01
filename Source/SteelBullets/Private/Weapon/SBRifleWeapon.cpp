@@ -17,8 +17,6 @@ ASBRifleWeapon::ASBRifleWeapon()
 void ASBRifleWeapon::BeginPlay()
 {
 	Super::BeginPlay();
-
-	check(WeaponVFXComponent);
 }
 
 void ASBRifleWeapon::StartFire()
