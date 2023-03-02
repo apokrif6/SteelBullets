@@ -73,8 +73,6 @@ void USBWeaponComponent::EquipWeapon(int32 WeaponIndex)
 {
 	if (WeaponIndex < 0 || WeaponIndex >= WeaponData.Num())
 	{
-		//TODO
-		//Add exception
 		return;
 	}
 
@@ -84,6 +82,7 @@ void USBWeaponComponent::EquipWeapon(int32 WeaponIndex)
 	if (CurrentWeapon)
 	{
 		CurrentWeapon->StopFire();
+		CurrentWeapon->Zoom(false);
 		AttachWeaponToSocket(CurrentWeapon, Character->GetMesh(), ArmorySocketName);
 	}
 
@@ -161,6 +160,13 @@ bool USBWeaponComponent::TryToAddAmmunition(TSubclassOf<ASBBaseWeapon> WeaponCla
 	}
 
 	return false;
+}
+
+void USBWeaponComponent::Zoom(bool IsActive)
+{
+	if (!CurrentWeapon) return;
+
+	CurrentWeapon->Zoom(IsActive);
 }
 
 void USBWeaponComponent::PlayAnimMontage(UAnimMontage* AnimMontage) const

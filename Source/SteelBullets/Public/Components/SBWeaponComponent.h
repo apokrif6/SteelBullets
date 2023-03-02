@@ -28,6 +28,8 @@ public:
 	bool GetAmmunitionData(FAmmunitionData& AmmunitionData) const;
 
 	bool TryToAddAmmunition(TSubclassOf<ASBBaseWeapon> WeaponClass, int32 ClipsToAdd);
+
+	void Zoom(bool IsActive);
 	
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon")

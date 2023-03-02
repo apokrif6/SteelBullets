@@ -23,6 +23,8 @@ public:
 
 	virtual void StopFire() override;
 
+	virtual void Zoom(bool IsActive) override;
+	
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon", Meta = (ClampMin = 0.1f))
 	float DelayBetweenShots = 0.3f;
@@ -39,6 +41,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
 	UNiagaraSystem* TraceFX;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Zoom")
+	float ZoomFOV = 50.0f;
+	
 	virtual void Shot() override;
 
 	virtual void BeginPlay() override;
@@ -63,4 +68,6 @@ private:
 	FString TraceTargetVariableName = "TraceTarget";
 
 	void SpawnTraceFX(const FVector& TraceStart, const FVector& TraceEnd);
+	
+	float DefaultCameraFOV = 90.0f;
 };

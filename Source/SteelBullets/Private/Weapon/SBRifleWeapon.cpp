@@ -35,6 +35,19 @@ void ASBRifleWeapon::StopFire()
 	GetWorldTimerManager().ClearTimer(ShotTimerHandle);
 }
 
+void ASBRifleWeapon::Zoom(bool IsActive)
+{
+	const auto PlayerController = Cast<APlayerController>(GetPlayerController());
+	if (!PlayerController) return;
+
+	const auto PlayerCameraManager = PlayerController->PlayerCameraManager;
+	if (!PlayerCameraManager) return;
+
+	const TInterval<float> FOV(ZoomFOV, DefaultCameraFOV);
+
+	PlayerCameraManager->SetFOV(IsActive ? FOV.Min : FOV.Max);
+}
+
 
 void ASBRifleWeapon::Shot()
 {

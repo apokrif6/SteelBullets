@@ -60,6 +60,10 @@ void ASBBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAction("Fire", IE_Released, WeaponComponent, &USBWeaponComponent::StopFire);
 	PlayerInputComponent->BindAction("ChangeWeapon", IE_Pressed, WeaponComponent, &USBWeaponComponent::NextWeapon);
 	PlayerInputComponent->BindAction("Reload", IE_Pressed, WeaponComponent, &USBWeaponComponent::Reload);
+
+	DECLARE_DELEGATE_OneParam(FZoomInputSignature, bool);
+	PlayerInputComponent->BindAction<FZoomInputSignature>("Zoom", IE_Pressed, WeaponComponent, &USBWeaponComponent::Zoom, true);
+	PlayerInputComponent->BindAction<FZoomInputSignature>("Zoom", IE_Released, WeaponComponent, &USBWeaponComponent::Zoom, false);
 }
 
 void ASBBaseCharacter::MoveForward(float Value)
@@ -122,6 +126,7 @@ void ASBBaseCharacter::OnHealthChanged(float Health)
 void ASBBaseCharacter::OnDeath()
 {
 	WeaponComponent->StopFire();
+	WeaponComponent->Zoom(false);
 
 	GetCharacterMovement()->DisableMovement();
 

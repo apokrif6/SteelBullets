@@ -88,6 +88,10 @@ bool ASBBaseWeapon::TryToAddAmmunition(int32 ClipsToAdd)
 	return true;
 }
 
+void ASBBaseWeapon::Zoom(bool IsActive)
+{
+}
+
 void ASBBaseWeapon::Shot()
 {
 }

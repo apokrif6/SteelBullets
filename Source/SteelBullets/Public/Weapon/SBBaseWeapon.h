@@ -33,6 +33,8 @@ public:
 
 	bool TryToAddAmmunition(int32 ClipsToAdd);
 
+	virtual void Zoom(bool IsActive);
+
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	USkeletalMeshComponent* WeaponMesh;
