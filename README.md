@@ -12,6 +12,7 @@ Features:
 - Animations
 - VFX
 - Basic AI
+- Pickups
 
 ![Gameplay Video](https://github.com/apokrif6/apokrif6.github.io/blob/main/assets/github/steelbullets_gif1.gif)
 
